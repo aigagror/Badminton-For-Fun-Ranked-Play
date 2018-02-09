@@ -103,8 +103,10 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         guard let id = cell.id.text else {
             fatalError()
         }
+        tableView.beginUpdates()
         PlayerRecorder.deletePlayer(withID: id)
         tableView.deleteRows(at: [indexPath], with: .automatic)
+        tableView.endUpdates()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

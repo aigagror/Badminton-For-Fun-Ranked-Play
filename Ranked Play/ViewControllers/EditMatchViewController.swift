@@ -47,8 +47,7 @@ class EditMatchViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func viewWillAppear(_ an
-        imated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
     }
@@ -86,14 +85,21 @@ class EditMatchViewController: UIViewController {
         let a1 = anonymousOne.isOn
         let a2 = anonymousTwo.isOn
         
+        guard let idOne = playerOne.id else {
+            fatalError()
+        }
+        guard let idTwo = playerTwo.id else {
+            fatalError()
+        }
+        
         if o1 || o2 {
-            MatchRecorder.createMatch(playerOneID: playerOne.id, playerTwoID: playerTwo.id, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
+            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
             dismiss(animated: true)
         }
         
         if s1 >= 21 || s2 >= 21 {
             if abs(s1 - s2) >= 2 {
-                MatchRecorder.createMatch(playerOneID: playerOne.id, playerTwoID: playerTwo.id, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
+                MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
                 dismiss(animated: true)
             }
         }

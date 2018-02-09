@@ -36,8 +36,8 @@ class MatchRecorder {
             newMatch.date = Date()
         }
         
-        newMatch.playerOneID = playerOne.id
-        newMatch.playerTwoID = playerTwo.id
+        newMatch.playerOneID = playerOneID
+        newMatch.playerTwoID = playerTwoID
         
         newMatch.anonymousOne = anonymousOne
         newMatch.anonymousTwo = anonymousTwo
@@ -53,6 +53,14 @@ class MatchRecorder {
     
     static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, date: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, anonymousOne: Bool? = nil, anonymousTwo: Bool? = nil, scoreOne: Int? = nil, scoreTwo: Int? = nil) {
         // TODO: Implement
+    }
+    
+    static func deleteMatch(atIndex i: Int) {
+        let matches = getAllMatches()
+        let match = matches[i]
+        let context = PersistentService.context
+        context.delete(match)
+        PersistentService.saveContext()
     }
     
     static func getAllMatches(fromPlayer player: Player) -> [Match] {
