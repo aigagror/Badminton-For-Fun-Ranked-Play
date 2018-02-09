@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class MatchesViewController: UIViewController {
 
@@ -31,6 +32,13 @@ class MatchesViewController: UIViewController {
     }
     
     // MARK: IBAction
+    
+    @IBAction func export(_ sender: Any) {
+        if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
+            present(mailVC, animated: true)
+        }
+    }
+    
     @IBAction func newMatch(_ sender: Any) {
         let activePlayers = PlayerRecorder.getAllPlayers(active: true)
         let count = activePlayers.count
@@ -169,6 +177,12 @@ extension MatchesViewController: UITableViewDelegate, UITableViewDataSource {
         MatchRecorder.deleteMatch(atIndex: row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
+    }
+}
+
+extension MatchesViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 

@@ -28,6 +28,7 @@ class EditMatchViewController: UIViewController {
     @IBOutlet weak var stepScoreOne: UIStepper!
     @IBOutlet weak var stepScoreTwo: UIStepper!
     
+    fileprivate var showChoices = true
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -64,6 +65,22 @@ class EditMatchViewController: UIViewController {
     */
     
     // MARK: IBAction
+    
+    @IBAction func toggleChoices(_ sender: Any) {
+        showChoices = !showChoices
+        
+        if showChoices {
+            optOutOne.isHidden = false
+            optOutTwo.isHidden = false
+            anonymousOne.isHidden = false
+            anonymousTwo.isHidden = false
+        } else {
+            optOutOne.isHidden = true
+            optOutTwo.isHidden = true
+            anonymousOne.isHidden = true
+            anonymousTwo.isHidden = true
+        }
+    }
     
     @IBAction func stepScoreOne(_ sender: UIStepper) {
         let score = Int(sender.value)

@@ -23,6 +23,8 @@
 		2C3BC5D4202D4BD900EDE694 /* RankedPlay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5D2202D4BD900EDE694 /* RankedPlay.xcdatamodeld */; };
 		2C3BC5D6202D4EFF00EDE694 /* PlayerRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5D5202D4EFF00EDE694 /* PlayerRecorder.swift */; };
 		2C3BC5DB202D531200EDE694 /* PersistentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5DA202D531200EDE694 /* PersistentService.swift */; };
+		2C580DC4202E65E800186161 /* Exporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C580DC3202E65E800186161 /* Exporter.swift */; };
+		2C580DC6202E66C500186161 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C580DC5202E66C500186161 /* DateFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		2C3BC5D3202D4BD900EDE694 /* RankedPlayData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RankedPlayData.xcdatamodel; sourceTree = "<group>"; };
 		2C3BC5D5202D4EFF00EDE694 /* PlayerRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRecorder.swift; sourceTree = "<group>"; };
 		2C3BC5DA202D531200EDE694 /* PersistentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentService.swift; sourceTree = "<group>"; };
+		2C580DC3202E65E800186161 /* Exporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exporter.swift; sourceTree = "<group>"; };
+		2C580DC5202E66C500186161 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				2C3BC5AE202D38B200EDE694 /* AppDelegate.swift */,
+				2C580DC3202E65E800186161 /* Exporter.swift */,
+				2C580DC5202E66C500186161 /* DateFormatter.swift */,
 				2C3BC5D8202D4F1100EDE694 /* ViewControllers */,
 				2C3BC5D7202D4F0600EDE694 /* Models */,
 				2C3BC5D9202D4F1A00EDE694 /* Views */,
@@ -262,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C3BC5D4202D4BD900EDE694 /* RankedPlay.xcdatamodeld in Sources */,
+				2C580DC4202E65E800186161 /* Exporter.swift in Sources */,
 				2C3BC5DB202D531200EDE694 /* PersistentService.swift in Sources */,
 				2C014480202D743500831CE7 /* EditMatchViewController.swift in Sources */,
 				2C3BC5D1202D3B5600EDE694 /* PlayerTableViewCell.swift in Sources */,
@@ -270,6 +277,7 @@
 				2C3BC5B3202D38B200EDE694 /* MatchesViewController.swift in Sources */,
 				2C014484202D7C5400831CE7 /* MatchRecorder.swift in Sources */,
 				2C3BC5AF202D38B200EDE694 /* AppDelegate.swift in Sources */,
+				2C580DC6202E66C500186161 /* DateFormatter.swift in Sources */,
 				2C014482202D7B9B00831CE7 /* MatchTableViewCell.swift in Sources */,
 				2C3BC5D6202D4EFF00EDE694 /* PlayerRecorder.swift in Sources */,
 				2C3BC5B1202D38B200EDE694 /* PlayerViewController.swift in Sources */,

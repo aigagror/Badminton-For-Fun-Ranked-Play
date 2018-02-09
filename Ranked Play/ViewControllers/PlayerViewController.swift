@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class PlayerViewController: UIViewController {
 
@@ -32,7 +33,11 @@ class PlayerViewController: UIViewController {
     }
 
     // MARK: IBAction
-    
+    @IBAction func export(_ sender: Any) {
+        if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
+            present(mailVC, animated: true)
+        }
+    }
     @IBAction func addPlayer(_ sender: Any) {
         let newPlayerAlertController = UIAlertController(title: "New Player", message: nil, preferredStyle: .alert)
         
@@ -183,3 +188,8 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+extension PlayerViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
