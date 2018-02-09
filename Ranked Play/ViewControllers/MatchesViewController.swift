@@ -108,11 +108,53 @@ extension MatchesViewController: UITableViewDelegate, UITableViewDataSource {
         guard let date = match.date else {
             fatalError()
         }
+        
+        // Date
         cell.date.text = df.string(from: date)
-        cell.nameOne.text = playerOne?.name
-        cell.nameTwo.text = playerTwo?.name
-        cell.scoreOne.text = "\(match.scoreOne)"
-        cell.scoreTwo.text = "\(match.scoreTwo)"
+        
+        // Name
+        if match.anonymousOne {
+            cell.nameOne.text = "Anonymous"
+        } else {
+            cell.nameOne.text = playerOne?.name
+        }
+        if match.anonymousTwo {
+            cell.nameTwo.text = "Anonymous"
+        } else {
+            cell.nameTwo.text = playerTwo?.name
+        }
+        
+        // Score
+        if match.optOutOne || match.optOutTwo {
+            cell.scoreOne.text = "-"
+            cell.scoreTwo.text = "-"
+        } else {
+            cell.scoreOne.text = "\(match.scoreOne)"
+            cell.scoreTwo.text = "\(match.scoreTwo)"
+            
+            if match.scoreOne > match.scoreTwo {
+                cell.scoreOne.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+            } else {
+                cell.scoreOne.textColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            }
+            if match.scoreTwo > match.scoreOne {
+                cell.scoreTwo.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+            } else {
+                cell.scoreTwo.textColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            }
+        }
+        
+        // Opt Out
+        if match.optOutOne {
+            cell.nameOne.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            cell.nameOne.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        }
+        if match.optOutTwo {
+            cell.nameTwo.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        } else {
+            cell.nameTwo.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        }
         
         return cell
     }

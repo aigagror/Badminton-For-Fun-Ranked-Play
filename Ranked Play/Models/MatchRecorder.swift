@@ -63,15 +63,71 @@ class MatchRecorder {
         PersistentService.saveContext()
     }
     
-    static func getAllMatches(fromPlayer player: Player) -> [Match] {
-        return []
+    
+    /// Finds all non-opted games (actually played games)
+    ///
+    /// - Parameter player: player involved
+    /// - Returns: list of all non-opted games
+    static func getAllGames(fromPlayer player: Player) -> [Match] {
+        let context = PersistentService.context
+        
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        guard let playerID = player.id else {
+            fatalError()
+        }
+        let playerPredicate = NSPredicate(format: "(playerOneID like %@ OR playerTwoID like %@) AND optOutOne == FALSE AND optOutTwo == FALSE", argumentArray: [playerID, playerID])
+        fetchRequest.predicate = playerPredicate
+        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            let searchResults = try context.fetch(fetchRequest)
+            
+            return searchResults
+        } catch {
+            print("Error: \(error)")
+        }
+        fatalError()
     }
     
     static func getAllWonMatches(fromPlayer player: Player) -> [Match] {
-        return []
+        let context = PersistentService.context
+        
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        guard let playerID = player.id else {
+            fatalError()
+        }
+        let wonPredicate = NSPredicate(format: "(playerOneID like %@ AND scoreOne > scoreTwo) OR (playerTwoID like %@ AND scoreTwo > scoreOne)", argumentArray: [playerID, playerID])
+        fetchRequest.predicate = wonPredicate
+        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            let searchResults = try context.fetch(fetchRequest)
+            
+            return searchResults
+        } catch {
+            print("Error: \(error)")
+        }
+        fatalError()
     }
     
     static func getAllFearedMatches(fromPlayer player: Player) -> [Match] {
-        return []
+        let context = PersistentService.context
+        
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        guard let playerID = player.id else {
+            fatalError()
+        }
+        let fearedPredicate = NSPredicate(format: "(playerOneID like %@ AND optOutOne == FALSE AND optOutTwo == TRUE) OR (playerTwoID like %@ AND optOutOne == TRUE AND optOutTwo == FALSE)", argumentArray: [playerID, playerID])
+        fetchRequest.predicate = fearedPredicate
+        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            let searchResults = try context.fetch(fetchRequest)
+            
+            return searchResults
+        } catch {
+            print("Error: \(error)")
+        }
+        fatalError()
     }
 }

@@ -142,8 +142,6 @@ class PlayerRecorder {
             let activePredicate = NSPredicate(format: "active == %@", argumentArray: [active])
             fetchRequest.predicate = activePredicate
         }
-        let winSort = NSSortDescriptor(key: "wins", ascending: false)
-        fetchRequest.sortDescriptors = [winSort]
         do {
             let searchResults = try context.fetch(fetchRequest)
             

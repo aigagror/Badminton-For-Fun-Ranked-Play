@@ -13,7 +13,6 @@ class PlayerViewController: UIViewController {
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
     
-    
     // MARK: Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,9 +136,12 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         cell.name.text = player.name
         cell.id.text = player.id
         if !player.secret {
-            cell.total.text = "\(player.totalGames)"
-            cell.wins.text = "\(player.wins)"
-            cell.fears.text = "\(player.feared)"
+            let totalGames = MatchRecorder.getAllGames(fromPlayer: player)
+            let wonGames = MatchRecorder.getAllWonMatches(fromPlayer: player)
+            let fearedGames = MatchRecorder.getAllFearedMatches(fromPlayer: player)
+            cell.total.text = "\(totalGames.count)"
+            cell.wins.text = "\(wonGames.count)"
+            cell.fears.text = "\(fearedGames.count)"
         } else {
             cell.total.text = "-"
             cell.wins.text = "-"
