@@ -78,6 +78,24 @@ class MatchesViewController: UIViewController {
 
 
 extension MatchesViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        let match = MatchRecorder.getMatch(forIndex: row)
+        guard let navVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "new_match_nav") as? UINavigationController else {
+            fatalError()
+        }
+        
+        guard let editMatchVC = navVC.topViewController as? EditMatchViewController else {
+            fatalError()
+        }
+        
+        editMatchVC.match = match
+        editMatchVC.playerOne = PlayerRecorder.getPlayer(withID: match.playerOneID!)
+        editMatchVC.playerTwo = PlayerRecorder.getPlayer(withID: match.playerTwoID!)
+        present(navVC, animated: true)
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

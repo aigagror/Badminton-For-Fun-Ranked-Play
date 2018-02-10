@@ -52,7 +52,36 @@ class MatchRecorder {
     }
     
     static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, date: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, anonymousOne: Bool? = nil, anonymousTwo: Bool? = nil, scoreOne: Int? = nil, scoreTwo: Int? = nil) {
-        // TODO: Implement
+        
+        if let playerOneID = playerOneID {
+            match.playerOneID = playerOneID
+        }
+        if let playerTwoID = playerTwoID {
+            match.playerTwoID = playerTwoID
+        }
+        if let date = date {
+            match.date = date
+        }
+        if let optOutOne = optOutOne {
+            match.optOutOne = optOutOne
+        }
+        if let optOutTwo = optOutTwo {
+            match.optOutTwo = optOutTwo
+        }
+        if let anonymousOne = anonymousOne {
+            match.anonymousOne = anonymousOne
+        }
+        if let anonymousTwo = anonymousTwo {
+            match.anonymousTwo = anonymousTwo
+        }
+        if let scoreOne = scoreOne {
+            match.scoreOne = Int16(scoreOne)
+        }
+        if let scoreTwo = scoreTwo {
+            match.scoreTwo = Int16(scoreTwo)
+        }
+        
+        PersistentService.saveContext()
     }
     
     static func deleteMatch(atIndex i: Int) {
@@ -61,6 +90,11 @@ class MatchRecorder {
         let context = PersistentService.context
         context.delete(match)
         PersistentService.saveContext()
+    }
+    
+    static func getMatch(forIndex i: Int) -> Match {
+        let matches = getAllMatches()
+        return matches[i]
     }
     
     

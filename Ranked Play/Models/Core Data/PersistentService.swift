@@ -44,7 +44,6 @@ class PersistentService {
     }()
     
     // MARK: - Core Data Saving support
-    
     class func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -56,6 +55,33 @@ class PersistentService {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        }
+    }
+    
+    /// BE CAREFUL WHEN USING THIS FUNCTION. IT PERMENANTLY DELETES EVERYTHING!!
+    class func WIPE_EVERYTHING() {
+        let context = PersistentService.context
+        let playerFetchRequest = NSFetchRequest<Player>.init(entityName: Player.description())
+        do {
+            let searchResults = try context.fetch(playerFetchRequest)
+            
+            for result in searchResults {
+                context.delete(result)
+            }
+            PersistentService.saveContext()
+        } catch {
+            print(error)
+        }
+        let matchFetchRequest = NSFetchRequest<Match>.init(entityName: Match.description())
+        do {
+            let searchResults = try context.fetch(matchFetchRequest)
+            
+            for result in searchResults {
+                context.delete(result)
+            }
+            PersistentService.saveContext()
+        } catch {
+            print(error)
         }
     }
 }

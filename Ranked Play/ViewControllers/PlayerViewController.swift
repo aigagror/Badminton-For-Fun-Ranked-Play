@@ -33,6 +33,10 @@ class PlayerViewController: UIViewController {
     }
 
     // MARK: IBAction
+    @IBAction func deactivateAll(_ sender: Any) {
+        
+    }
+    
     @IBAction func export(_ sender: Any) {
         if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
             present(mailVC, animated: true)

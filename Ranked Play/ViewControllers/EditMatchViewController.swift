@@ -23,6 +23,8 @@ class EditMatchViewController: UIViewController {
     
     @IBOutlet weak var nameOne: UILabel!
     @IBOutlet weak var nameTwo: UILabel!
+    @IBOutlet weak var idOne: UILabel!
+    @IBOutlet weak var idTwo: UILabel!
     @IBOutlet weak var scoreOne: UIPickerView!
     @IBOutlet weak var scoreTwo: UIPickerView!
     @IBOutlet weak var stepScoreOne: UIStepper!
@@ -51,6 +53,14 @@ class EditMatchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
+        idOne.text = playerOne.id
+        idTwo.text = playerTwo.id
+        if let match = match {
+            let s1 = match.scoreOne
+            let s2 = match.scoreTwo
+            scoreOne.selectRow(Int(s1), inComponent: 0, animated: false)
+            scoreTwo.selectRow(Int(s2), inComponent: 0, animated: false)
+        }
     }
     
 
@@ -109,6 +119,12 @@ class EditMatchViewController: UIViewController {
             fatalError()
         }
         
+        if let match = match {
+            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
+            dismiss(animated: true)
+            return
+        }
+        
         if o1 || o2 {
             MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
             dismiss(animated: true)
@@ -120,6 +136,8 @@ class EditMatchViewController: UIViewController {
                 dismiss(animated: true)
             }
         }
+        
+        
     }
     
     @IBAction func cancel(_ sender: Any) {
