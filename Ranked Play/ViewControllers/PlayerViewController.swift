@@ -34,7 +34,7 @@ class PlayerViewController: UIViewController {
 
     // MARK: IBAction
     @IBAction func deactivateAll(_ sender: Any) {
-        
+        PlayerRecorder.deactivateAll()
     }
     
     @IBAction func export(_ sender: Any) {
@@ -57,7 +57,7 @@ class PlayerViewController: UIViewController {
             textField.autocapitalizationType = .words
         }
         newPlayerAlertController.addTextField { (textField) in
-            textField.placeholder = "Nickname"
+            textField.placeholder = "Nickname (optional)"
             textField.autocapitalizationType = .words
         }
         
@@ -131,6 +131,20 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         present(editPlayerVC, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let oldActive = sourceIndexPath.section == 0
+        let newActive = destinationIndexPath.section == 0
+
+        let row = sourceIndexPath.row
+        
+        let player = PlayerRecorder.getPlayer(forIndex: row, active: oldActive)
+        player.active = newActive
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
     // MARK: Data Source
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let active = indexPath.section == 0
@@ -151,10 +165,12 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
             cell.total.text = "\(totalGames.count)"
             cell.wins.text = "\(wonGames.count)"
             cell.fears.text = "\(fearedGames.count)"
+            cell.level.text = "\(player.level)"
         } else {
             cell.total.text = "-"
             cell.wins.text = "-"
             cell.fears.text = "-"
+            cell.level.text = "-"
         }
         
         

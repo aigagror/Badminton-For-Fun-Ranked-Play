@@ -27,7 +27,7 @@ class MatchRecorder {
         fatalError()
     }
     
-    static func createMatch(playerOneID: String, playerTwoID: String, date: Date? = nil, optOutOne: Bool, optOutTwo: Bool, anonymousOne: Bool, anonymousTwo: Bool, scoreOne: Int, scoreTwo: Int) {
+    static func createMatch(playerOneID: String, playerTwoID: String, date: Date? = nil, optOutOne: Bool, optOutTwo: Bool, anonymousOne: Bool, anonymousTwo: Bool, scoreOne: Int, scoreTwo: Int, finished: Bool) {
         let context = PersistentService.context
         let newMatch = Match(context: context)
         if let date = date {
@@ -48,10 +48,31 @@ class MatchRecorder {
         newMatch.scoreOne = Int16(scoreOne)
         newMatch.scoreTwo = Int16(scoreTwo)
         
+        newMatch.finished = finished
+        
+        // Rankings
+        if finished {
+            let p1 = PlayerRecorder.getPlayer(withID: playerOneID)
+            let p2 = PlayerRecorder.getPlayer(withID: playerTwoID)
+            
+            let l1 = p1.level
+            let l2 = p2.level
+            
+            // Player one won
+            if scoreOne > scoreTwo {
+                p1.level += 12
+                p2.level = (l2 - 10) < 0 ? 0 : (l2 - 10)
+            } else {
+                // Player two won
+                p2.level += 12
+                p1.level = (l1 - 10) < 0 ? 0 : (l1 - 10)
+            }
+        }
+        
         PersistentService.saveContext()
     }
     
-    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, date: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, anonymousOne: Bool? = nil, anonymousTwo: Bool? = nil, scoreOne: Int? = nil, scoreTwo: Int? = nil) {
+    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, date: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, anonymousOne: Bool? = nil, anonymousTwo: Bool? = nil, scoreOne: Int? = nil, scoreTwo: Int? = nil, finished: Bool? = nil) {
         
         if let playerOneID = playerOneID {
             match.playerOneID = playerOneID
@@ -79,6 +100,9 @@ class MatchRecorder {
         }
         if let scoreTwo = scoreTwo {
             match.scoreTwo = Int16(scoreTwo)
+        }
+        if let finished = finished {
+            match.finished = finished
         }
         
         PersistentService.saveContext()

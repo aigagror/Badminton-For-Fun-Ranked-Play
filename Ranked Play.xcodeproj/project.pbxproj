@@ -25,6 +25,7 @@
 		2C3BC5DB202D531200EDE694 /* PersistentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5DA202D531200EDE694 /* PersistentService.swift */; };
 		2C580DC4202E65E800186161 /* Exporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C580DC3202E65E800186161 /* Exporter.swift */; };
 		2C580DC6202E66C500186161 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C580DC5202E66C500186161 /* DateFormatter.swift */; };
+		2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		2C3BC5DA202D531200EDE694 /* PersistentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentService.swift; sourceTree = "<group>"; };
 		2C580DC3202E65E800186161 /* Exporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exporter.swift; sourceTree = "<group>"; };
 		2C580DC5202E66C500186161 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePlayerTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 		2C3BC5D8202D4F1100EDE694 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */,
 				2C01447F202D743500831CE7 /* EditMatchViewController.swift */,
 				2C01447D202D6A5400831CE7 /* EditPlayerViewController.swift */,
 				2C3BC5B0202D38B200EDE694 /* PlayerViewController.swift */,
@@ -270,6 +273,7 @@
 				2C3BC5D4202D4BD900EDE694 /* RankedPlay.xcdatamodeld in Sources */,
 				2C580DC4202E65E800186161 /* Exporter.swift in Sources */,
 				2C3BC5DB202D531200EDE694 /* PersistentService.swift in Sources */,
+				2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */,
 				2C014480202D743500831CE7 /* EditMatchViewController.swift in Sources */,
 				2C3BC5D1202D3B5600EDE694 /* PlayerTableViewCell.swift in Sources */,
 				2C014486202D80E900831CE7 /* Player.swift in Sources */,

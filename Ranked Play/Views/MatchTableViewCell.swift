@@ -16,6 +16,7 @@ class MatchTableViewCell: UITableViewCell {
     @IBOutlet weak var nameTwo: UILabel!
     @IBOutlet weak var scoreTwo: UILabel!
     
+    @IBOutlet weak var finishedLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

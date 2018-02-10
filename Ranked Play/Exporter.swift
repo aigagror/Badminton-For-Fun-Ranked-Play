@@ -34,6 +34,7 @@ class Exporter {
                 playerTuple["lastName"] = player.lastName
                 playerTuple["nickname"] = player.nickname
                 playerTuple["secret"] = player.secret
+                playerTuple["level"] = player.level
                 
                 playersJSON.append(playerTuple)
             }
@@ -46,7 +47,8 @@ class Exporter {
                 matchTuple["anonymousOne"] = match.anonymousOne
                 matchTuple["anonymouTwo"] = match.anonymousTwo
                 let rfcDF = DateFormatter.RFC3339DateFormatter
-                matchTuple["Date"] = rfcDF.string(from: match.date!)
+                matchTuple["date"] = rfcDF.string(from: match.date!)
+                matchTuple["finished"] = match.finished
                 matchTuple["optOutOne"] = match.optOutOne
                 matchTuple["optOutTwo"] = match.optOutTwo
                 matchTuple["playerOneID"] = match.playerOneID

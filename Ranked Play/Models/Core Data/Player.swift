@@ -10,6 +10,12 @@ import Foundation
 
 extension Player {
     var name: String {
+        if nickname == nil && firstName == nil && lastName == nil {
+            guard let id = id else {
+                fatalError()
+            }
+            return id
+        }
         return nickname ?? "\(firstName ?? "") \(lastName ?? "")"
     }
 }

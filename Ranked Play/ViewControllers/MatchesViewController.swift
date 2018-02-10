@@ -42,17 +42,7 @@ class MatchesViewController: UIViewController {
     @IBAction func newMatch(_ sender: Any) {
         let activePlayers = PlayerRecorder.getAllPlayers(active: true)
         let count = activePlayers.count
-        if count >= 2 {
-            
-            // Get two random people
-            let p1 = Int(arc4random_uniform(UInt32(count)))
-            var p2 = Int(arc4random_uniform(UInt32(count)))
-            while p2 == p1 {
-                p2 = Int(arc4random_uniform(UInt32(count)))
-            }
-            
-            let playerOne = activePlayers[p1]
-            let playerTwo = activePlayers[p2]
+        if let (playerOne, playerTwo) = PlayerRecorder.generateMatch() {
             
             guard let navVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "new_match_nav") as? UINavigationController else {
                 fatalError()
@@ -66,6 +56,15 @@ class MatchesViewController: UIViewController {
             newMatchVC.playerTwo = playerTwo
             
             present(navVC, animated: true)
+        } else {
+            // Present alert
+            let notEnoughAlert = UIAlertController(title: "Not Enough Active Players", message: nil, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                notEnoughAlert.dismiss(animated: true)
+            })
+            notEnoughAlert.addAction(okAction)
+            
+            present(notEnoughAlert, animated: true)
         }
     }
     
@@ -170,17 +169,12 @@ extension MatchesViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
         
-        // Opt Out
-        if match.optOutOne {
-            cell.nameOne.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        } else {
-            cell.nameOne.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        }
-        if match.optOutTwo {
-            cell.nameTwo.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        } else {
-            cell.nameTwo.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        }
+        // Opt Out && Anonymous
+        setNameLabelColor(label: cell.nameOne, optOut: match.optOutOne, anonymous: match.anonymousOne)
+        setNameLabelColor(label: cell.nameTwo, optOut: match.optOutTwo, anonymous: match.anonymousTwo)
+        
+        // Finished or not
+        cell.finishedLabel.isHidden = match.finished
         
         return cell
     }
@@ -195,6 +189,19 @@ extension MatchesViewController: UITableViewDelegate, UITableViewDataSource {
         MatchRecorder.deleteMatch(atIndex: row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
+    }
+    
+    fileprivate func setNameLabelColor(label: UILabel, optOut: Bool, anonymous: Bool) {
+        switch (optOut, anonymous) {
+        case (true, true):
+            label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        case (true, false):
+            label.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        case (false, true):
+            label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        case (false, false):
+            label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        }
     }
 }
 

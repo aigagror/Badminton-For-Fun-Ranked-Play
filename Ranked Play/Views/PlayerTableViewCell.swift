@@ -17,7 +17,7 @@ class PlayerTableViewCell: UITableViewCell {
     @IBOutlet weak var total: UILabel!
     @IBOutlet weak var wins: UILabel!
     @IBOutlet weak var fears: UILabel!
-    
+    @IBOutlet weak var level: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

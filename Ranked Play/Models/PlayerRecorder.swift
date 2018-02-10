@@ -8,8 +8,41 @@
 
 import Foundation
 import CoreData
+import GameplayKit
 
 class PlayerRecorder {
+    
+    static func generateMatch() -> (Player, Player)? {
+        let activePlayers = getAllPlayers(active: true)
+        
+        let n = activePlayers.count
+        
+        if n < 2 {
+            return nil
+        }
+        
+        let randomIndex = Int(arc4random_uniform(UInt32(n)))
+        var skewedRandomIndex: Int!
+        
+        // Find a pair that's usually close to p1.
+        // Assume that active players are sorted by rank,
+        // so we simply skew the chance closer to 'random'
+        let randomSource = GKRandomSource()
+        let distribution = GKGaussianDistribution(randomSource: randomSource, mean: Float(randomIndex), deviation: Float(n/3 == 0 ? 1 : n/3))
+        
+        repeat {
+            skewedRandomIndex = distribution.nextInt()
+        } while skewedRandomIndex < 0 || skewedRandomIndex >= n || skewedRandomIndex == randomIndex
+        
+        let p1 = activePlayers[randomIndex]
+        let p2 = activePlayers[skewedRandomIndex]
+        
+        guard p1 !== p2 else {
+            fatalError()
+        }
+        
+        return (p1, p2)
+    }
     
     /// Returns whether or not we have successfully added a player
     static func addPlayer(firstName: String? = nil, lastName: String? = nil, nickname: String? = nil, id: String, secret: Bool) -> Bool {
@@ -142,6 +175,12 @@ class PlayerRecorder {
             let activePredicate = NSPredicate(format: "active == %@", argumentArray: [active])
             fetchRequest.predicate = activePredicate
         }
+        
+        let level = NSSortDescriptor(key: "level", ascending: false)
+        let idSort = NSSortDescriptor(key: "id", ascending: true)
+        
+        fetchRequest.sortDescriptors = [level, idSort]
+        
         do {
             let searchResults = try context.fetch(fetchRequest)
             
@@ -150,5 +189,19 @@ class PlayerRecorder {
             print("Error: \(error)")
         }
         fatalError()
+    }
+    
+    static func deactivateAll() {
+        let allPlayers = getAllPlayers()
+        for player in allPlayers {
+            player.active = false
+        }
+        
+        PersistentService.saveContext()
+    }
+    
+    static func getPlayer(forIndex i: Int, active: Bool? = nil) -> Player {
+        let players = getAllPlayers(active: active)
+        return players[i]
     }
 }

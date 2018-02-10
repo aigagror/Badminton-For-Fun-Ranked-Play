@@ -64,17 +64,27 @@ class EditMatchViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if let changePlayerVC = segue.destination as? ChangePlayerTableViewController {
+            if segue.identifier == "change_player_one" {
+                changePlayerVC.editingOne = true
+            } else {
+                changePlayerVC.editingOne = false
+            }
+        }
     }
-    */
+ 
     
     // MARK: IBAction
+    @IBAction func unwindFromChangePlayerVC(segue: UIStoryboardSegue) {
+        
+    }
     
     @IBAction func toggleChoices(_ sender: Any) {
         showChoices = !showChoices
@@ -120,24 +130,27 @@ class EditMatchViewController: UIViewController {
         }
         
         if let match = match {
-            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
+            let finished = finishedScore(s1, s2)
+            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: finished)
             dismiss(animated: true)
             return
         }
         
         if o1 || o2 {
-            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
+            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: true)
             dismiss(animated: true)
+            return
         }
         
-        if s1 >= 21 || s2 >= 21 {
-            if abs(s1 - s2) >= 2 {
-                MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2)
-                dismiss(animated: true)
-            }
+        if finishedScore(s1, s2) {
+            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: true)
+            dismiss(animated: true)
+            return
         }
         
+        MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: false)
         
+        dismiss(animated: true)
     }
     
     @IBAction func cancel(_ sender: Any) {
@@ -145,7 +158,9 @@ class EditMatchViewController: UIViewController {
     }
     
     // MARK: Private Functions
-    
+    fileprivate func finishedScore(_ s1: Int, _ s2: Int) -> Bool {
+        return (s1 >= 21 || s2 >= 21) && (abs(s1 - s2) >= 2)
+    }
 }
 
 extension EditMatchViewController: UIPickerViewDataSource, UIPickerViewDelegate {
