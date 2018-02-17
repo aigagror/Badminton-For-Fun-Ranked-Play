@@ -34,21 +34,33 @@ class MatchesCollectionViewController: UICollectionViewController {
         if identifier == "edit_match" {
             return true
         }
-        return PlayerRecorder.generateSinglesMatch() != nil
+        return PlayerRecorder.generateMatch() != nil
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "new_match" {
+        if segue.identifier == "new_singles_match" {
             guard let editMatchVC = segue.destination as? EditMatchViewController else {
                 fatalError()
             }
             
-            guard let (playerOne, playerTwo) = PlayerRecorder.generateSinglesMatch() else {
+            guard let players = PlayerRecorder.generateMatch(numberOfPlayers: 2) else {
                 fatalError()
             }
             
-            let match = MatchRecorder.createMatch(playerOne: playerOne, playerTwo: playerTwo)
+            let match = MatchRecorder.createMatch(playerOne: players[0], playerTwo: players[1])
+            editMatchVC.match = match
+            editMatchVC.newMatch = true
+        } else if segue.identifier == "new_doubles_match" {
+            guard let editMatchVC = segue.destination as? EditMatchViewController else {
+                fatalError()
+            }
+            
+            guard let players = PlayerRecorder.generateMatch(numberOfPlayers: 4) else {
+                fatalError()
+            }
+            
+            let match = MatchRecorder.createMatch(playerOne: players[0], playerTwo: players[1], playerThree: players[2], playerFour: players[3])
             editMatchVC.match = match
             editMatchVC.newMatch = true
         } else if segue.identifier == "edit_match" {

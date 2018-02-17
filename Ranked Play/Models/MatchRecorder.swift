@@ -30,7 +30,7 @@ class MatchRecorder {
                 
                 let duration = currentDate.timeIntervalSince(oldestDate)
                 
-                return Int((duration/Date.numberOfSecondsInADay).rounded(.up))
+                return Int((duration/Date.numberOfSecondsInADay).rounded(.up)) + 1
             }
             
             return 0
@@ -82,7 +82,7 @@ class MatchRecorder {
         return matches[indexPath.row]
     }
     
-    static func createMatch(playerOne: Player, playerTwo: Player, playerThreeID: String? = nil, playerFourID: String? = nil) -> Match {
+    static func createMatch(playerOne: Player, playerTwo: Player, playerThree: Player? = nil, playerFour: Player? = nil) -> Match {
         let context = PersistentService.context
         let newMatch = Match(context: context)
         
@@ -90,8 +90,8 @@ class MatchRecorder {
         
         newMatch.playerOneID = playerOne.id!
         newMatch.playerTwoID = playerTwo.id!
-        newMatch.playerThreeID = playerThreeID
-        newMatch.playerFourID = playerFourID
+        newMatch.playerThreeID = playerThree?.id
+        newMatch.playerFourID = playerFour?.id
         
         newMatch.optOutOne = false
         newMatch.optOutTwo = false

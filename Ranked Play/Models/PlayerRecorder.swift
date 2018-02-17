@@ -12,49 +12,39 @@ import GameplayKit
 
 class PlayerRecorder {
     
-    static func generateDoublesMatch() -> (Player, Player, Player, Player)? {
-        // TODO
-        return nil
-    }
-    
-    static func generateSinglesMatch() -> (Player, Player)? {
-        let activePlayers = getAllPlayers(active: true, free: true)
+    static func generateMatch(numberOfPlayers: Int = 2) -> [Player]? {
+        let freePlayers = getAllPlayers(active: true, free: true)
         
-        let n = activePlayers.count
+        let n = freePlayers.count
         
-        if n < 2 {
+        if n < numberOfPlayers {
             return nil
         }
         
-        var randomIndex: Int!
-        var p1: Player!
-        var p2: Player!
+        var randomIndices = Set<Int>()
         
-        repeat {
-            randomIndex = Int(arc4random_uniform(UInt32(n)))
-            p1 = activePlayers[randomIndex]
-        } while MatchRecorder.isInAGame(player: p1)
-        
-        var skewedRandomIndex: Int!
+        let randomAnchorIndex = Int(arc4random_uniform(UInt32(n)))
+        randomIndices.insert(randomAnchorIndex)
         
         // Find a pair that's usually close to p1.
         // Assume that active players are sorted by rank,
         // so we simply skew the chance closer to 'random'
         let randomSource = GKRandomSource()
-        let distribution = GKGaussianDistribution(randomSource: randomSource, mean: Float(randomIndex), deviation: Float(n/3 == 0 ? 1 : n/3))
+        let distribution = GKGaussianDistribution(randomSource: randomSource, mean: Float(randomAnchorIndex), deviation: Float(n/3 == 0 ? 1 : n/3))
         
+        var skewedRandomIndex: Int!
         repeat {
             repeat {
                 skewedRandomIndex = distribution.nextInt()
-            } while skewedRandomIndex < 0 || skewedRandomIndex >= n || skewedRandomIndex == randomIndex
-            p2 = activePlayers[skewedRandomIndex]
-        } while MatchRecorder.isInAGame(player: p2)
+            } while skewedRandomIndex < 0 || skewedRandomIndex >= n
+            randomIndices.insert(skewedRandomIndex)
+        } while randomIndices.count < numberOfPlayers
         
-        guard p1 !== p2 else {
-            fatalError()
+        let players = randomIndices.map { (i) -> Player in
+            return freePlayers[i]
         }
         
-        return (p1, p2)
+        return players
     }
     
     /// Returns whether or not we have successfully added a player

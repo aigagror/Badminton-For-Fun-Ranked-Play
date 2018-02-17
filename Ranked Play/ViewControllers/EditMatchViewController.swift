@@ -57,16 +57,20 @@ class EditMatchViewController: UIViewController {
             playerFourContainer.isHidden = true
         }
         
+        let o1 = match.optOutOne
+        let o2 = match.optOutTwo
+        
+        optOutOne.setOn(o1, animated: false)
+        optOutTwo.setOn(o2, animated: false)
+        
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
         idOne.text = playerOne.id
         idTwo.text = playerTwo.id
-        if let match = match {
-            let s1 = match.teamOneScore
-            let s2 = match.teamTwoScore
-            teamOneScore.selectRow(Int(s1), inComponent: 0, animated: false)
-            teamTwoScore.selectRow(Int(s2), inComponent: 0, animated: false)
-        }
+        let s1 = match.teamOneScore
+        let s2 = match.teamTwoScore
+        teamOneScore.selectRow(Int(s1), inComponent: 0, animated: false)
+        teamTwoScore.selectRow(Int(s2), inComponent: 0, animated: false)
     }
     
 
@@ -130,7 +134,7 @@ class EditMatchViewController: UIViewController {
         
         if o1 || o2 {
             MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, finished: true)
-            dismiss(animated: true)
+            navigationController?.popViewController(animated: true)
             return
         }
         
@@ -138,11 +142,11 @@ class EditMatchViewController: UIViewController {
         if finished {
             let endDate = Date()
             MatchRecorder.editMatch(match: match, endDate: endDate, optOutOne: o1, optOutTwo: o2, teamOneScore: s1, teamTwoScore: s2, finished: finished)
-            dismiss(animated: true)
+            navigationController?.popViewController(animated: true)
             return
         } else {
             MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, teamOneScore: s1, teamTwoScore: s2, finished: false)
-            dismiss(animated: true)
+            navigationController?.popViewController(animated: true)
             return
         }
     }
