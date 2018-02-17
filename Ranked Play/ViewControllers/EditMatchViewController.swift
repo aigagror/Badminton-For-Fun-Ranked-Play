@@ -13,7 +13,6 @@ class EditMatchViewController: UIViewController {
     var newMatch: Bool!
     
     var match: Match!
-    var startDate: Date!
     
     @IBOutlet weak var optOutOne: UISwitch!
     @IBOutlet weak var optOutTwo: UISwitch!
@@ -25,6 +24,9 @@ class EditMatchViewController: UIViewController {
     @IBOutlet weak var teamTwoScore: UIPickerView!
     @IBOutlet weak var stepScoreOne: UIStepper!
     @IBOutlet weak var stepScoreTwo: UIStepper!
+    
+    @IBOutlet weak var playerThreeContainer: UIStackView!
+    @IBOutlet weak var playerFourContainer: UIStackView!
     
     fileprivate var showChoices = true
     
@@ -39,9 +41,6 @@ class EditMatchViewController: UIViewController {
         teamTwoScore.delegate = self
         teamOneScore.dataSource = self
         teamTwoScore.dataSource = self
-        
-        // Record the start time of the match
-        startDate = Date()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,6 +51,11 @@ class EditMatchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let playerOne = PlayerRecorder.getPlayer(withID: match.playerOneID!)
         let playerTwo = PlayerRecorder.getPlayer(withID: match.playerTwoID!)
+        
+        if match.playerThreeID == nil {
+            playerThreeContainer.isHidden = true
+            playerFourContainer.isHidden = true
+        }
         
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
@@ -147,7 +151,7 @@ class EditMatchViewController: UIViewController {
         if newMatch {
             MatchRecorder.deleteMatch(match)
         }
-        dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: Private Functions

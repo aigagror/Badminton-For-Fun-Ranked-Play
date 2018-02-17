@@ -18,7 +18,7 @@ class PlayerRecorder {
     }
     
     static func generateSinglesMatch() -> (Player, Player)? {
-        let activePlayers = getAllPlayers(active: true)
+        let activePlayers = getAllPlayers(active: true, free: true)
         
         let n = activePlayers.count
         
@@ -179,7 +179,7 @@ class PlayerRecorder {
         fatalError()
     }
     
-    static func getAllPlayers(active: Bool? = nil) -> [Player] {
+    static func getAllPlayers(active: Bool? = nil, free: Bool? = nil) -> [Player] {
         let context = PersistentService.context
         
         let fetchRequest = NSFetchRequest<Player>(entityName: Player.description())
@@ -195,7 +195,21 @@ class PlayerRecorder {
         fetchRequest.sortDescriptors = [level, idSort]
         
         do {
-            let searchResults = try context.fetch(fetchRequest)
+            var searchResults = try context.fetch(fetchRequest)
+            
+            if (free ?? false) {
+                var busyPlayers = Set<Player>()
+                for player in searchResults {
+                    if MatchRecorder.isInAGame(player: player) {
+                        busyPlayers.insert(player)
+                    }
+                }
+                
+                for busyPlayer in busyPlayers {
+                    let index = searchResults.index(of: busyPlayer)!
+                    searchResults.remove(at: index)
+                }
+            }
             
             return searchResults
         } catch {

@@ -21,4 +21,9 @@ class MatchCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var playerTwoName: UILabel!
     @IBOutlet weak var playerThreeName: UILabel!
     @IBOutlet weak var playerFourName: UILabel!
+    
+    override func draw(_ rect: CGRect) {
+        clipsToBounds = false
+        layer.masksToBounds = false
+    }
 }

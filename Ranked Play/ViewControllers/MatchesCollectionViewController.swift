@@ -18,10 +18,8 @@ class MatchesCollectionViewController: UICollectionViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
         // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(self, selector: #selector(contextChanged), name: .NSManagedObjectContextDidSave, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,6 +31,9 @@ class MatchesCollectionViewController: UICollectionViewController {
     // MARK: - Navigation
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "edit_match" {
+            return true
+        }
         return PlayerRecorder.generateSinglesMatch() != nil
     }
     
@@ -49,10 +50,25 @@ class MatchesCollectionViewController: UICollectionViewController {
             
             let match = MatchRecorder.createMatch(playerOne: playerOne, playerTwo: playerTwo)
             editMatchVC.match = match
+            editMatchVC.newMatch = true
+        } else if segue.identifier == "edit_match" {
+            guard let editMatchVC = segue.destination as? EditMatchViewController else {
+                fatalError()
+            }
+            guard let indexPath = collectionView?.indexPathsForSelectedItems?.first else {
+                fatalError()
+            }
+            
+            guard let cell = collectionView?.cellForItem(at: indexPath) as? MatchCollectionViewCell else {
+                fatalError()
+            }
+            
+            let match = cell.match
+            editMatchVC.match = match
+            editMatchVC.newMatch = false
         }
     }
- 
-
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -69,6 +85,7 @@ class MatchesCollectionViewController: UICollectionViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? MatchCollectionViewCell else {
             fatalError()
         }
+        
     
         // Configure the cell
         let match = MatchRecorder.getMatch(forIndexPath: indexPath)
@@ -105,8 +122,8 @@ class MatchesCollectionViewController: UICollectionViewController {
             cell.playerThreeName.isHidden = false
             cell.playerFourName.isHidden = false
             
-            let playerThree = PlayerRecorder.getPlayer(withID: match.playerThreeID!)
-            let playerFour = PlayerRecorder.getPlayer(withID: match.playerFourID!)
+            let playerThree = PlayerRecorder.getPlayer(withID: playerThreeID)
+            let playerFour = PlayerRecorder.getPlayer(withID: playerFourID)
             
             cell.playerThreeName.text = playerThree.name
             cell.playerFourName.text = playerFour.name
@@ -148,5 +165,11 @@ class MatchesCollectionViewController: UICollectionViewController {
     
     }
     */
-
+    
+    
+    // MARK: Private Functions
+    @objc
+    private func contextChanged() {
+        collectionView?.reloadData()
+    }
 }
