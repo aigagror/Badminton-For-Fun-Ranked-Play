@@ -124,7 +124,13 @@ extension PlayerTableViewController: UITableViewDelegate, UITableViewDataSource 
         guard let id = cell.id.text else {
             fatalError()
         }
+        
+        let player = cell.player!
         tableView.beginUpdates()
+        let matchesWithPlayer = MatchRecorder.getAllGames(fromPlayer: player)
+        for match in matchesWithPlayer {
+            MatchRecorder.deleteMatch(match)
+        }
         PlayerRecorder.deletePlayer(withID: id)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
