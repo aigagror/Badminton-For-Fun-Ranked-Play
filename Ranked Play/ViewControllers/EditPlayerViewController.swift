@@ -11,14 +11,14 @@ import UIKit
 class EditPlayerViewController: UIViewController {
 
     // MARK: Properties
+    var playerToEdit: Player!
+    
     @IBOutlet weak var active: UISwitch!
-    @IBOutlet weak var secret: UISwitch!
+    @IBOutlet weak var privateAccount: UISwitch!
     @IBOutlet weak var nickname: UITextField!
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var lastName: UITextField!
     @IBOutlet weak var id: UITextField!
-    
-    var originalID: String!
     
     // MARK: Life Cycle
     override func viewDidLoad() {
@@ -39,18 +39,17 @@ class EditPlayerViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let player = PlayerRecorder.getPlayer(withID: originalID)
-        active.isOn = player.active
-        secret.isOn = player.secret
-        nickname.text = player.nickname
-        firstName.text = player.firstName
-        lastName.text = player.lastName
-        id.text = player.id
+        active.isOn = playerToEdit.active
+        privateAccount.isOn = playerToEdit.privateAccount
+        nickname.text = playerToEdit.nickname
+        firstName.text = playerToEdit.firstName
+        lastName.text = playerToEdit.lastName
+        id.text = playerToEdit.id
     }
     
     // MARK: IBActions
     @IBAction func save(_ sender: Any) {
-        if PlayerRecorder.editPlayer(originalID: originalID, newID: id.text, active: active.isOn, secret: secret.isOn, nickname: nickname.text, firstName: firstName.text, lastName: lastName.text) {
+        if PlayerRecorder.editPlayer(player: playerToEdit, newID: id.text, active: active.isOn, privateAccount: privateAccount.isOn, nickname: nickname.text, firstName: firstName.text, lastName: lastName.text) {
             dismiss(animated: true)
         }
     }

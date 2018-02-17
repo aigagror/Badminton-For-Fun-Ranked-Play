@@ -10,11 +10,13 @@ import UIKit
 
 class MatchTableViewCell: UITableViewCell {
 
+    var match: Match!
+    
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var nameOne: UILabel!
-    @IBOutlet weak var scoreOne: UILabel!
-    @IBOutlet weak var nameTwo: UILabel!
-    @IBOutlet weak var scoreTwo: UILabel!
+    @IBOutlet weak var playerOneName: UILabel!
+    @IBOutlet weak var teamOneScore: UILabel!
+    @IBOutlet weak var playerTwoName: UILabel!
+    @IBOutlet weak var teamTwoScore: UILabel!
     
     @IBOutlet weak var finishedLabel: UILabel!
     

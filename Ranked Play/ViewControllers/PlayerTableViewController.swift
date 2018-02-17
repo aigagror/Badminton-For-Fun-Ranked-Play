@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class PlayerViewController: UIViewController {
+class PlayerTableViewController: UIViewController {
 
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
@@ -31,6 +31,22 @@ class PlayerViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "edit_player" {
+            guard let indexPath = tableView.indexPathForSelectedRow else {
+                fatalError()
+            }
+            guard let cell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
+                fatalError()
+            }
+            
+            guard let editPlayerVC = segue.destination as? EditPlayerViewController else {
+                fatalError()
+            }
+            editPlayerVC.playerToEdit = cell.player
+        }
+    }
 
     // MARK: IBAction
     @IBAction func deactivateAll(_ sender: Any) {
@@ -47,14 +63,17 @@ class PlayerViewController: UIViewController {
         
         newPlayerAlertController.addTextField { (textField) in
             textField.placeholder = "ID (NetID Or Some Unique Name)"
+            textField.returnKeyType = .next
         }
         newPlayerAlertController.addTextField { (textField) in
             textField.placeholder = "First Name"
             textField.autocapitalizationType = .words
+            textField.returnKeyType = .next
         }
         newPlayerAlertController.addTextField { (textField) in
             textField.placeholder = "Last Name"
             textField.autocapitalizationType = .words
+            textField.returnKeyType = .next
         }
         newPlayerAlertController.addTextField { (textField) in
             textField.placeholder = "Nickname (optional)"
@@ -73,13 +92,7 @@ class PlayerViewController: UIViewController {
             let firstName = newPlayerAlertController.textFields?[1].text
             let lastName = newPlayerAlertController.textFields?[2].text
             let nickName = newPlayerAlertController.textFields?[3].text
-            if PlayerRecorder.addPlayer(firstName: firstName, lastName: lastName, nickname: nickName, id: id, secret: false) {
-                newPlayerAlertController.dismiss(animated: true)
-                guard let editPlayerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "edit_player") as? EditPlayerViewController else {
-                    fatalError()
-                }
-                editPlayerVC.originalID = id
-                self.present(editPlayerVC, animated: true)
+            if PlayerRecorder.addPlayer(firstName: firstName, lastName: lastName, nickname: nickName, id: id, privateAccount: false) {
             }
         }
         
@@ -96,7 +109,7 @@ class PlayerViewController: UIViewController {
     }
 }
 
-extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
+extension PlayerTableViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: Delegate
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -115,20 +128,6 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
         PlayerRecorder.deletePlayer(withID: id)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
-            fatalError()
-        }
-        
-        let id = cell.id.text
-        
-        guard let editPlayerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "edit_player") as? EditPlayerViewController else {
-            fatalError()
-        }
-        editPlayerVC.originalID = id
-        present(editPlayerVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -156,9 +155,11 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
             fatalError()
         }
         
+        cell.player = player
+        
         cell.name.text = player.name
         cell.id.text = player.id
-        if !player.secret {
+        if !player.privateAccount {
             let totalGames = MatchRecorder.getAllGames(fromPlayer: player)
             let wonGames = MatchRecorder.getAllWonMatches(fromPlayer: player)
             let fearedGames = MatchRecorder.getAllFearedMatches(fromPlayer: player)
@@ -208,7 +209,7 @@ extension PlayerViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension PlayerViewController: MFMailComposeViewControllerDelegate {
+extension PlayerTableViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }

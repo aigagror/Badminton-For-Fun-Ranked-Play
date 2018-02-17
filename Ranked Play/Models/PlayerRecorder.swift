@@ -12,7 +12,12 @@ import GameplayKit
 
 class PlayerRecorder {
     
-    static func generateMatch() -> (Player, Player)? {
+    static func generateDoublesMatch() -> (Player, Player, Player, Player)? {
+        // TODO
+        return nil
+    }
+    
+    static func generateSinglesMatch() -> (Player, Player)? {
         let activePlayers = getAllPlayers(active: true)
         
         let n = activePlayers.count
@@ -21,7 +26,15 @@ class PlayerRecorder {
             return nil
         }
         
-        let randomIndex = Int(arc4random_uniform(UInt32(n)))
+        var randomIndex: Int!
+        var p1: Player!
+        var p2: Player!
+        
+        repeat {
+            randomIndex = Int(arc4random_uniform(UInt32(n)))
+            p1 = activePlayers[randomIndex]
+        } while MatchRecorder.isInAGame(player: p1)
+        
         var skewedRandomIndex: Int!
         
         // Find a pair that's usually close to p1.
@@ -31,11 +44,11 @@ class PlayerRecorder {
         let distribution = GKGaussianDistribution(randomSource: randomSource, mean: Float(randomIndex), deviation: Float(n/3 == 0 ? 1 : n/3))
         
         repeat {
-            skewedRandomIndex = distribution.nextInt()
-        } while skewedRandomIndex < 0 || skewedRandomIndex >= n || skewedRandomIndex == randomIndex
-        
-        let p1 = activePlayers[randomIndex]
-        let p2 = activePlayers[skewedRandomIndex]
+            repeat {
+                skewedRandomIndex = distribution.nextInt()
+            } while skewedRandomIndex < 0 || skewedRandomIndex >= n || skewedRandomIndex == randomIndex
+            p2 = activePlayers[skewedRandomIndex]
+        } while MatchRecorder.isInAGame(player: p2)
         
         guard p1 !== p2 else {
             fatalError()
@@ -45,7 +58,7 @@ class PlayerRecorder {
     }
     
     /// Returns whether or not we have successfully added a player
-    static func addPlayer(firstName: String? = nil, lastName: String? = nil, nickname: String? = nil, id: String, secret: Bool) -> Bool {
+    static func addPlayer(firstName: String? = nil, lastName: String? = nil, nickname: String? = nil, id: String, privateAccount: Bool) -> Bool {
         // Check that no other player has the same id
         let exists = playerExists(withID: id)
         if exists {
@@ -62,8 +75,8 @@ class PlayerRecorder {
             newPlayer.nickname = nil
         }
         newPlayer.id = id
-        newPlayer.active = false
-        newPlayer.secret = secret
+        newPlayer.active = true
+        newPlayer.privateAccount = privateAccount
         
         PersistentService.saveContext()
     
@@ -111,19 +124,19 @@ class PlayerRecorder {
         fatalError()
     }
     
-    static func editPlayer(originalID: String, newID: String? = nil, active: Bool? = nil, secret: Bool? = nil, nickname: String? = nil, firstName: String? = nil, lastName: String? = nil) -> Bool {
-        if let newID = newID, newID != originalID {
+    static func editPlayer(player: Player, newID: String? = nil, active: Bool? = nil, privateAccount: Bool? = nil, nickname: String? = nil, firstName: String? = nil, lastName: String? = nil) -> Bool {
+        if let newID = newID, newID != player.id
+        {
             if playerExists(withID: newID) {
                 return false
             }
         }
         
-        let player = getPlayer(withID: originalID)
         if let newID = newID {
             player.id = newID
         }
-        if let secret = secret {
-            player.secret = secret
+        if let privateAccount = privateAccount {
+            player.privateAccount = privateAccount
         }
         if let active = active {
             player.active = active

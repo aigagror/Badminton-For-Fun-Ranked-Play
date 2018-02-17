@@ -12,6 +12,8 @@ class PlayerTableViewCell: UITableViewCell {
 
     // MARK: Properties
     
+    var player: Player!
+    
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var id: UILabel!
     @IBOutlet weak var total: UILabel!

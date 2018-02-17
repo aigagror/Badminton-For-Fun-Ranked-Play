@@ -10,7 +10,7 @@ import UIKit
 
 class ChangePlayerTableViewController: UITableViewController {
 
-    var editingOne = true
+    var playerNumber: PlayerNumber!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,14 +101,17 @@ class ChangePlayerTableViewController: UITableViewController {
         if let editMatchVC = segue.destination as? EditMatchViewController {
             if let selectedRow = tableView.indexPathForSelectedRow?.row {
                 let player = PlayerRecorder.getPlayer(forIndex: selectedRow, active: true)
-                if editingOne {
-                    if player !== editMatchVC.playerTwo {
-                        editMatchVC.playerOne = player
-                    }
-                } else {
-                    if player !== editMatchVC.playerOne {
-                        editMatchVC.playerTwo = player
-                    }
+                let playerID = player.id!
+                let match = editMatchVC.match!
+                switch playerNumber! {
+                case .one:
+                    MatchRecorder.editMatch(match: match, playerOneID: playerID)
+                case .two:
+                    MatchRecorder.editMatch(match: match, playerTwoID: playerID)
+                case .three:
+                    MatchRecorder.editMatch(match: match, playerThreeID: playerID)
+                case .four:
+                    MatchRecorder.editMatch(match: match, playerFourID: playerID)
                 }
             }
         }

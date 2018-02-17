@@ -33,7 +33,7 @@ class Exporter {
                 playerTuple["firstName"] = player.firstName
                 playerTuple["lastName"] = player.lastName
                 playerTuple["nickname"] = player.nickname
-                playerTuple["secret"] = player.secret
+                playerTuple["privateAccount"] = player.privateAccount
                 playerTuple["level"] = player.level
                 
                 playersJSON.append(playerTuple)
@@ -44,17 +44,21 @@ class Exporter {
             var matchesJSON = [[String : Any]]()
             for match in allMatches {
                 var matchTuple = [String : Any]()
-                matchTuple["anonymousOne"] = match.anonymousOne
-                matchTuple["anonymouTwo"] = match.anonymousTwo
                 let rfcDF = DateFormatter.RFC3339DateFormatter
-                matchTuple["date"] = rfcDF.string(from: match.date!)
+                matchTuple["startDate"] = rfcDF.string(from: match.startDate!)
+                matchTuple["endDate"] = rfcDF.string(from: match.endDate!)
                 matchTuple["finished"] = match.finished
                 matchTuple["optOutOne"] = match.optOutOne
                 matchTuple["optOutTwo"] = match.optOutTwo
+                matchTuple["optOutThree"] = match.optOutThree
+                matchTuple["optOutFour"] = match.optOutFour
                 matchTuple["playerOneID"] = match.playerOneID
                 matchTuple["playerTwoID"] = match.playerTwoID
-                matchTuple["scoreOne"] = match.scoreOne
-                matchTuple["scoreTwo"] = match.scoreTwo
+                
+                matchTuple["playerThreeID"] = match.playerThreeID
+                matchTuple["playerFourID"] = match.playerFourID
+                matchTuple["teamOneScore"] = match.teamOneScore
+                matchTuple["teamTwoScore"] = match.teamTwoScore
                 
                 matchesJSON.append(matchTuple)
             }

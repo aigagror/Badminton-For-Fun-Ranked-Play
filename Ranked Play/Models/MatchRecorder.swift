@@ -10,12 +10,42 @@ import Foundation
 import CoreData
 
 class MatchRecorder {
+    
+    static func getNumberOfSections() -> Int {
+        let context = PersistentService.context
+        
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: true)
+        fetchRequest.sortDescriptors = [dateSort]
+        fetchRequest.fetchLimit = 1
+        do {
+            let searchResults = try context.fetch(fetchRequest)
+            
+            if let first = searchResults.first {
+                guard let oldestDate = first.startDate else {
+                    fatalError()
+                }
+                let currentDate = Date()
+                
+                let duration = currentDate.timeIntervalSince(oldestDate)
+                
+                return Int((duration/Date.numberOfSecondsInADay).rounded(.up))
+            }
+            
+            return 0
+        } catch {
+            print("Error: \(error)")
+        }
+        fatalError()
+    }
+    
     static func getAllMatches() -> [Match] {
         let context = PersistentService.context
         
         let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
         
-        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
         do {
             let searchResults = try context.fetch(fetchRequest)
@@ -27,52 +57,89 @@ class MatchRecorder {
         fatalError()
     }
     
-    static func createMatch(playerOneID: String, playerTwoID: String, date: Date? = nil, optOutOne: Bool, optOutTwo: Bool, anonymousOne: Bool, anonymousTwo: Bool, scoreOne: Int, scoreTwo: Int, finished: Bool) {
+    static func getAllMatches(forSection section: Int) -> [Match] {
+        let (startDate, endDate) = computeStartAndEndDates(section: section)
+        
         let context = PersistentService.context
-        let newMatch = Match(context: context)
-        if let date = date {
-            newMatch.date = date
-        } else {
-            newMatch.date = Date()
-        }
         
-        newMatch.playerOneID = playerOneID
-        newMatch.playerTwoID = playerTwoID
-        
-        newMatch.anonymousOne = anonymousOne
-        newMatch.anonymousTwo = anonymousTwo
-        
-        newMatch.optOutOne = optOutOne
-        newMatch.optOutTwo = optOutTwo
-        
-        newMatch.scoreOne = Int16(scoreOne)
-        newMatch.scoreTwo = Int16(scoreTwo)
-        
-        newMatch.finished = finished
-        
-        // Rankings
-        if finished {
-            let p1 = PlayerRecorder.getPlayer(withID: playerOneID)
-            let p2 = PlayerRecorder.getPlayer(withID: playerTwoID)
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        let datePredicate = NSPredicate(format: "startDate >= %@ AND startDate < %@", startDate as NSDate, endDate as NSDate)
+        fetchRequest.predicate = datePredicate
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            let matches = try context.fetch(fetchRequest)
             
-            let l1 = p1.level
-            let l2 = p2.level
-            
-            // Player one won
-            if scoreOne > scoreTwo {
-                p1.level += 12
-                p2.level = (l2 - 10) < 0 ? 0 : (l2 - 10)
-            } else {
-                // Player two won
-                p2.level += 12
-                p1.level = (l1 - 10) < 0 ? 0 : (l1 - 10)
-            }
+            return matches
+        } catch {
+            print("Error: \(error)")
         }
-        
-        PersistentService.saveContext()
+        fatalError()
     }
     
-    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, date: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, anonymousOne: Bool? = nil, anonymousTwo: Bool? = nil, scoreOne: Int? = nil, scoreTwo: Int? = nil, finished: Bool? = nil) {
+    static func getMatch(forIndexPath indexPath: IndexPath) -> Match {
+        let matches = getAllMatches(forSection: indexPath.section)
+        return matches[indexPath.row]
+    }
+    
+    static func createMatch(playerOne: Player, playerTwo: Player, playerThreeID: String? = nil, playerFourID: String? = nil) -> Match {
+        let context = PersistentService.context
+        let newMatch = Match(context: context)
+        
+        newMatch.startDate = Date()
+        
+        newMatch.playerOneID = playerOne.id!
+        newMatch.playerTwoID = playerTwo.id!
+        newMatch.playerThreeID = playerThreeID
+        newMatch.playerFourID = playerFourID
+        
+        newMatch.optOutOne = false
+        newMatch.optOutTwo = false
+        newMatch.optOutThree = false
+        newMatch.optOutFour = false
+        newMatch.finished = false
+        
+        PersistentService.saveContext()
+        
+        return newMatch
+    }
+    
+    static func finishMatch(match: Match, teamOneScore: Int, teamTwoScore: Int) -> Bool {
+        if teamOneScore < 21 && teamTwoScore < 21 {
+            return false
+        }
+        
+        if abs(teamTwoScore - teamOneScore) < 2 {
+            return false
+        }
+        match.teamOneScore = Int16(teamOneScore)
+        match.teamTwoScore = Int16(teamTwoScore)
+        PersistentService.saveContext()
+        return true
+    }
+    
+    static func isInAGame(player: Player) -> Bool {
+        let context = PersistentService.context
+        
+        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
+        guard let playerID = player.id else {
+            fatalError()
+        }
+        let playerPredicate = NSPredicate(format: "(playerOneID like %@ OR playerTwoID like %@) AND finished == FALSE", argumentArray: [playerID, playerID])
+        fetchRequest.predicate = playerPredicate
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
+        fetchRequest.sortDescriptors = [dateSort]
+        do {
+            let searchResults = try context.fetch(fetchRequest)
+            
+            return !searchResults.isEmpty
+        } catch {
+            print("Error: \(error)")
+        }
+        fatalError()
+    }
+    
+    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, playerThreeID: String? = nil, playerFourID: String? = nil, startDate: Date? = nil, endDate: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, optOutThree: Bool? = nil, optOutFour: Bool? = nil, teamOneScore: Int? = nil, teamTwoScore: Int? = nil, finished: Bool? = nil) {
         
         if let playerOneID = playerOneID {
             match.playerOneID = playerOneID
@@ -80,8 +147,17 @@ class MatchRecorder {
         if let playerTwoID = playerTwoID {
             match.playerTwoID = playerTwoID
         }
-        if let date = date {
-            match.date = date
+        if let playerThreeID = playerThreeID {
+            match.playerThreeID = playerThreeID
+        }
+        if let playerFourID = playerFourID {
+            match.playerFourID = playerFourID
+        }
+        if let startDate = startDate {
+            match.startDate = startDate
+        }
+        if let endDate = endDate {
+            match.endDate = endDate
         }
         if let optOutOne = optOutOne {
             match.optOutOne = optOutOne
@@ -89,17 +165,17 @@ class MatchRecorder {
         if let optOutTwo = optOutTwo {
             match.optOutTwo = optOutTwo
         }
-        if let anonymousOne = anonymousOne {
-            match.anonymousOne = anonymousOne
+        if let optOutThree = optOutThree {
+            match.optOutThree = optOutThree
         }
-        if let anonymousTwo = anonymousTwo {
-            match.anonymousTwo = anonymousTwo
+        if let optOutFour = optOutFour {
+            match.optOutFour = optOutFour
         }
-        if let scoreOne = scoreOne {
-            match.scoreOne = Int16(scoreOne)
+        if let teamOneScore = teamOneScore {
+            match.teamOneScore = Int16(teamOneScore)
         }
-        if let scoreTwo = scoreTwo {
-            match.scoreTwo = Int16(scoreTwo)
+        if let teamTwoScore = teamTwoScore {
+            match.teamTwoScore = Int16(teamTwoScore)
         }
         if let finished = finished {
             match.finished = finished
@@ -108,9 +184,7 @@ class MatchRecorder {
         PersistentService.saveContext()
     }
     
-    static func deleteMatch(atIndex i: Int) {
-        let matches = getAllMatches()
-        let match = matches[i]
+    static func deleteMatch(_ match: Match) {
         let context = PersistentService.context
         context.delete(match)
         PersistentService.saveContext()
@@ -133,9 +207,9 @@ class MatchRecorder {
         guard let playerID = player.id else {
             fatalError()
         }
-        let playerPredicate = NSPredicate(format: "(playerOneID like %@ OR playerTwoID like %@) AND optOutOne == FALSE AND optOutTwo == FALSE", argumentArray: [playerID, playerID])
+        let playerPredicate = NSPredicate(format: "(playerOneID LIKE %@ OR playerTwoID LIKE %@ OR playerThreeID LIKE %@ OR playerFourID LIKE %@) AND optOutOne == FALSE AND optOutTwo == FALSE AND optOutThree == FALSE AND optOutFour == FALSE", argumentArray: [playerID, playerID, playerID, playerID])
         fetchRequest.predicate = playerPredicate
-        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
         do {
             let searchResults = try context.fetch(fetchRequest)
@@ -154,9 +228,9 @@ class MatchRecorder {
         guard let playerID = player.id else {
             fatalError()
         }
-        let wonPredicate = NSPredicate(format: "(playerOneID like %@ AND scoreOne > scoreTwo) OR (playerTwoID like %@ AND scoreTwo > scoreOne)", argumentArray: [playerID, playerID])
+        let wonPredicate = NSPredicate(format: "((playerOneID LIKE %@ OR playerThreeID LIKE %@) AND teamOneScore > teamTwoScore) OR ((playerTwoID LIKE %@ OR playerFourID LIKE %@) AND teamTwoScore > teamOneScore)", argumentArray: [playerID, playerID, playerID, playerID])
         fetchRequest.predicate = wonPredicate
-        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
         do {
             let searchResults = try context.fetch(fetchRequest)
@@ -175,9 +249,10 @@ class MatchRecorder {
         guard let playerID = player.id else {
             fatalError()
         }
+        // TODO: Fix
         let fearedPredicate = NSPredicate(format: "(playerOneID like %@ AND optOutOne == FALSE AND optOutTwo == TRUE) OR (playerTwoID like %@ AND optOutOne == TRUE AND optOutTwo == FALSE)", argumentArray: [playerID, playerID])
         fetchRequest.predicate = fearedPredicate
-        let dateSort = NSSortDescriptor(key: "date", ascending: false)
+        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
         do {
             let searchResults = try context.fetch(fetchRequest)
@@ -187,5 +262,18 @@ class MatchRecorder {
             print("Error: \(error)")
         }
         fatalError()
+    }
+    
+    // MARK: Private functions
+    static private func computeStartAndEndDates(section: Int) -> (startDate: Date, endDate: Date) {
+        let currentDate = Date()
+        let offSetDate = currentDate.addingTimeInterval(-Date.numberOfSecondsInADay * TimeInterval(section))
+        let dayAfterOffSetDate = offSetDate.addingTimeInterval(Date.numberOfSecondsInADay)
+        
+        let calendar = Calendar.current
+        let startDate = calendar.startOfDay(for: offSetDate)
+        let endDate = calendar.startOfDay(for: dayAfterOffSetDate)
+        
+        return (startDate, endDate)
     }
 }

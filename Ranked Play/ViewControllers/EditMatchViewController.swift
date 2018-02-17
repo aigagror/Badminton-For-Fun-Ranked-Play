@@ -10,23 +10,19 @@ import UIKit
 
 class EditMatchViewController: UIViewController {
     
-    var match: Match?
+    var newMatch: Bool!
     
-    var playerOne: Player!
-    var playerTwo: Player!
+    var match: Match!
+    var startDate: Date!
     
     @IBOutlet weak var optOutOne: UISwitch!
     @IBOutlet weak var optOutTwo: UISwitch!
-    
-    @IBOutlet weak var anonymousOne: UISwitch!
-    @IBOutlet weak var anonymousTwo: UISwitch!
-    
     @IBOutlet weak var nameOne: UILabel!
     @IBOutlet weak var nameTwo: UILabel!
     @IBOutlet weak var idOne: UILabel!
     @IBOutlet weak var idTwo: UILabel!
-    @IBOutlet weak var scoreOne: UIPickerView!
-    @IBOutlet weak var scoreTwo: UIPickerView!
+    @IBOutlet weak var teamOneScore: UIPickerView!
+    @IBOutlet weak var teamTwoScore: UIPickerView!
     @IBOutlet weak var stepScoreOne: UIStepper!
     @IBOutlet weak var stepScoreTwo: UIStepper!
     
@@ -39,10 +35,13 @@ class EditMatchViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // Picker Data Source and Delegation
-        scoreOne.delegate = self
-        scoreTwo.delegate = self
-        scoreOne.dataSource = self
-        scoreTwo.dataSource = self
+        teamOneScore.delegate = self
+        teamTwoScore.delegate = self
+        teamOneScore.dataSource = self
+        teamTwoScore.dataSource = self
+        
+        // Record the start time of the match
+        startDate = Date()
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,15 +50,18 @@ class EditMatchViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let playerOne = PlayerRecorder.getPlayer(withID: match.playerOneID!)
+        let playerTwo = PlayerRecorder.getPlayer(withID: match.playerTwoID!)
+        
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
         idOne.text = playerOne.id
         idTwo.text = playerTwo.id
         if let match = match {
-            let s1 = match.scoreOne
-            let s2 = match.scoreTwo
-            scoreOne.selectRow(Int(s1), inComponent: 0, animated: false)
-            scoreTwo.selectRow(Int(s2), inComponent: 0, animated: false)
+            let s1 = match.teamOneScore
+            let s2 = match.teamTwoScore
+            teamOneScore.selectRow(Int(s1), inComponent: 0, animated: false)
+            teamTwoScore.selectRow(Int(s2), inComponent: 0, animated: false)
         }
     }
     
@@ -72,10 +74,17 @@ class EditMatchViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if let changePlayerVC = segue.destination as? ChangePlayerTableViewController {
-            if segue.identifier == "change_player_one" {
-                changePlayerVC.editingOne = true
-            } else {
-                changePlayerVC.editingOne = false
+            switch segue.identifier ?? "" {
+            case "change_player_one":
+                changePlayerVC.playerNumber = .one
+            case "change_player_two":
+                changePlayerVC.playerNumber = .two
+            case "change_player_three":
+                changePlayerVC.playerNumber = .three
+            case "change_player_four":
+                changePlayerVC.playerNumber = .four
+            default:
+                fatalError()
             }
         }
     }
@@ -92,68 +101,52 @@ class EditMatchViewController: UIViewController {
         if showChoices {
             optOutOne.isHidden = false
             optOutTwo.isHidden = false
-            anonymousOne.isHidden = false
-            anonymousTwo.isHidden = false
         } else {
             optOutOne.isHidden = true
             optOutTwo.isHidden = true
-            anonymousOne.isHidden = true
-            anonymousTwo.isHidden = true
         }
     }
     
     @IBAction func stepScoreOne(_ sender: UIStepper) {
         let score = Int(sender.value)
-        scoreOne.selectRow(score, inComponent: 0, animated: true)
+        teamOneScore.selectRow(score, inComponent: 0, animated: true)
     }
     
     @IBAction func stepScoreTwo(_ sender: UIStepper) {
         let score = Int(sender.value)
-        scoreTwo.selectRow(score, inComponent: 0, animated: true)
+        teamTwoScore.selectRow(score, inComponent: 0, animated: true)
     }
     
     @IBAction func save(_ sender: Any) {
-        let s1 = scoreOne.selectedRow(inComponent: 0)
-        let s2 = scoreTwo.selectedRow(inComponent: 0)
+        let s1 = teamOneScore.selectedRow(inComponent: 0)
+        let s2 = teamTwoScore.selectedRow(inComponent: 0)
         
         let o1 = optOutOne.isOn
         let o2 = optOutTwo.isOn
         
-        let a1 = anonymousOne.isOn
-        let a2 = anonymousTwo.isOn
-        
-        guard let idOne = playerOne.id else {
-            fatalError()
-        }
-        guard let idTwo = playerTwo.id else {
-            fatalError()
-        }
-        
-        if let match = match {
-            let finished = finishedScore(s1, s2)
-            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: finished)
-            dismiss(animated: true)
-            return
-        }
-        
         if o1 || o2 {
-            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: true)
+            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, finished: true)
             dismiss(animated: true)
             return
         }
         
-        if finishedScore(s1, s2) {
-            MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: true)
+        let finished = finishedScore(s1, s2)
+        if finished {
+            let endDate = Date()
+            MatchRecorder.editMatch(match: match, endDate: endDate, optOutOne: o1, optOutTwo: o2, teamOneScore: s1, teamTwoScore: s2, finished: finished)
+            dismiss(animated: true)
+            return
+        } else {
+            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, teamOneScore: s1, teamTwoScore: s2, finished: false)
             dismiss(animated: true)
             return
         }
-        
-        MatchRecorder.createMatch(playerOneID: idOne, playerTwoID: idTwo, optOutOne: o1, optOutTwo: o2, anonymousOne: a1, anonymousTwo: a2, scoreOne: s1, scoreTwo: s2, finished: false)
-        
-        dismiss(animated: true)
     }
     
     @IBAction func cancel(_ sender: Any) {
+        if newMatch {
+            MatchRecorder.deleteMatch(match)
+        }
         dismiss(animated: true)
     }
     
@@ -184,7 +177,7 @@ extension EditMatchViewController: UIPickerViewDataSource, UIPickerViewDelegate 
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if component == 0 {
-            if pickerView === scoreOne {
+            if pickerView === teamOneScore {
                 stepScoreOne.value = Double(row)
             } else {
                 stepScoreTwo.value = Double(row)
