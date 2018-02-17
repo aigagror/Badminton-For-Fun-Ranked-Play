@@ -73,26 +73,11 @@ class PlayerRecorder {
         return true
     }
     
-    static func deletePlayer(withID id: String) {
+    static func deletePlayer(_ player: Player) {
+        // Delete the player
         let context = PersistentService.context
-        let fetchRequest = NSFetchRequest<Player>(entityName: Player.description())
-        
-        let activePredicate = NSPredicate(format: "id like '\(id)'")
-        fetchRequest.predicate = activePredicate
-        do {
-            let searchResults = try context.fetch(fetchRequest)
-            guard let playerToDelete = searchResults.first else {
-                fatalError()
-            }
-            
-            // Delete the player
-            context.delete(playerToDelete)
-            
-            return
-        } catch {
-            print("Error: \(error)")
-        }
-        fatalError()
+        context.delete(player)
+        PersistentService.saveContext()
     }
     
     static func getPlayer(withID id: String) -> Player {

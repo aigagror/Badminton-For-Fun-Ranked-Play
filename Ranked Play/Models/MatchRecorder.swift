@@ -200,14 +200,14 @@ class MatchRecorder {
     ///
     /// - Parameter player: player involved
     /// - Returns: list of all non-opted games
-    static func getAllGames(fromPlayer player: Player) -> [Match] {
+    static func getAllGames(fromPlayer player: Player, nonOpt: Bool? = nil) -> [Match] {
         let context = PersistentService.context
         
         let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
         guard let playerID = player.id else {
             fatalError()
         }
-        let playerPredicate = NSPredicate(format: "(playerOneID LIKE %@ OR playerTwoID LIKE %@ OR playerThreeID LIKE %@ OR playerFourID LIKE %@) AND optOutOne == FALSE AND optOutTwo == FALSE AND optOutThree == FALSE AND optOutFour == FALSE", argumentArray: [playerID, playerID, playerID, playerID])
+        let playerPredicate = NSPredicate(format: "(playerOneID LIKE %@ OR playerTwoID LIKE %@ OR playerThreeID LIKE %@ OR playerFourID LIKE %@)" + ((nonOpt ?? false) ? " AND optOutOne == FALSE AND optOutTwo == FALSE AND optOutThree == FALSE AND optOutFour == FALSE" : ""), argumentArray: [playerID, playerID, playerID, playerID])
         fetchRequest.predicate = playerPredicate
         let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
