@@ -431,11 +431,17 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="idFour" destination="B2K-kg-Hqh" id="Ya4-GI-vcT"/>
                         <outlet property="idOne" destination="GyG-bs-660" id="ELK-Eq-gHJ"/>
+                        <outlet property="idThree" destination="Jkw-Hq-Oy4" id="mfI-eO-GLM"/>
                         <outlet property="idTwo" destination="Hik-w2-RQp" id="aDK-9z-XQi"/>
+                        <outlet property="nameFour" destination="WKE-1W-sNn" id="nQy-mj-9lr"/>
                         <outlet property="nameOne" destination="Gwc-T8-kP4" id="Qq9-av-8cY"/>
+                        <outlet property="nameThree" destination="e6E-jk-mIw" id="63q-cl-KTz"/>
                         <outlet property="nameTwo" destination="eSk-Ij-Qff" id="b5B-Ob-6dl"/>
+                        <outlet property="optOutFour" destination="FJc-SP-1bv" id="D0V-AE-nK1"/>
                         <outlet property="optOutOne" destination="tQe-0Y-vXe" id="0lw-w7-3mP"/>
+                        <outlet property="optOutThree" destination="2CY-hv-UP5" id="DYy-R0-Pio"/>
                         <outlet property="optOutTwo" destination="bbe-i9-GIe" id="Xtt-5i-Nz7"/>
                         <outlet property="playerFourContainer" destination="DQC-IT-W0s" id="ZyQ-IQ-gx9"/>
                         <outlet property="playerThreeContainer" destination="CGg-OU-kjN" id="peY-9e-UEA"/>
@@ -447,7 +453,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JPy-k3-wPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3913" y="358"/>
+            <point key="canvasLocation" x="2812" y="358"/>
         </scene>
         <!--Change Player Table View Controller-->
         <scene sceneID="AnC-lx-DgQ">
@@ -499,7 +505,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="My0-RV-97U" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="r0e-dm-jj0" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="4950" y="359"/>
+            <point key="canvasLocation" x="3849" y="359"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -902,31 +908,13 @@
             </objects>
             <point key="canvasLocation" x="2812" y="-322"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="BqA-fA-u4h">
-            <objects>
-                <navigationController storyboardIdentifier="new_match_nav" automaticallyAdjustsScrollViewInsets="NO" id="9pY-SK-mMg" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Pn-8a-Fz4">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="9Fy-fU-cWK" kind="relationship" relationship="rootViewController" id="3Sg-RN-RGl"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Hvf-Iv-Xtw" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3913" y="-456"/>
-        </scene>
     </scenes>
     <resources>
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="i9H-9V-cVY"/>
-        <segue reference="SqW-HY-cSs"/>
+        <segue reference="OF4-W7-O7K"/>
+        <segue reference="oRf-y2-pYE"/>
     </inferredMetricsTieBreakers>
 </document>

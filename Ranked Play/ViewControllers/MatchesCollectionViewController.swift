@@ -34,7 +34,13 @@ class MatchesCollectionViewController: UICollectionViewController {
         if identifier == "edit_match" {
             return true
         }
-        return PlayerRecorder.generateMatch() != nil
+        if identifier == "new_singles_match" {
+            return PlayerRecorder.generateMatch(numberOfPlayers: 2) != nil
+        }
+        if identifier == "new_doubles_match" {
+            return PlayerRecorder.generateMatch(numberOfPlayers: 4) != nil
+        }
+        return false
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
