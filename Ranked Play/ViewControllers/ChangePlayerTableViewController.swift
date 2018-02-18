@@ -10,6 +10,7 @@ import UIKit
 
 class ChangePlayerTableViewController: UITableViewController {
 
+    var match: Match!
     var playerNumber: PlayerNumber!
     
     override func viewDidLoad() {
@@ -54,6 +55,24 @@ class ChangePlayerTableViewController: UITableViewController {
 
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedRow = indexPath.row
+        let player = PlayerRecorder.getPlayer(forIndex: selectedRow, active: true)
+        let playerID = player.id!
+        switch playerNumber! {
+        case .one:
+            MatchRecorder.editMatch(match: match, playerOneID: playerID)
+        case .two:
+            MatchRecorder.editMatch(match: match, playerTwoID: playerID)
+        case .three:
+            MatchRecorder.editMatch(match: match, playerThreeID: playerID)
+        case .four:
+            MatchRecorder.editMatch(match: match, playerFourID: playerID)
+        }
+        
+        navigationController?.popViewController(animated: true)
+    }
  
 
     /*
@@ -94,28 +113,13 @@ class ChangePlayerTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
+    /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let editMatchVC = segue.destination as? EditMatchViewController {
-            if let selectedRow = tableView.indexPathForSelectedRow?.row {
-                let player = PlayerRecorder.getPlayer(forIndex: selectedRow, active: true)
-                let playerID = player.id!
-                let match = editMatchVC.match!
-                switch playerNumber! {
-                case .one:
-                    MatchRecorder.editMatch(match: match, playerOneID: playerID)
-                case .two:
-                    MatchRecorder.editMatch(match: match, playerTwoID: playerID)
-                case .three:
-                    MatchRecorder.editMatch(match: match, playerThreeID: playerID)
-                case .four:
-                    MatchRecorder.editMatch(match: match, playerFourID: playerID)
-                }
-            }
-        }
     }
+    */
  
     // MARK: IBActions
 }

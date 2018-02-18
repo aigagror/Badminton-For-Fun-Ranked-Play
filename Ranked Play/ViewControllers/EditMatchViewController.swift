@@ -14,6 +14,10 @@ class EditMatchViewController: UIViewController {
     
     var match: Match!
     
+    @IBOutlet weak var startDate: UIDatePicker!
+    @IBOutlet weak var endDate: UIDatePicker!
+    @IBOutlet weak var endDateSwitch: UISwitch!
+    
     @IBOutlet weak var optOutOne: UISwitch!
     @IBOutlet weak var optOutTwo: UISwitch!
     @IBOutlet weak var optOutThree: UISwitch!
@@ -88,6 +92,9 @@ class EditMatchViewController: UIViewController {
         let s2 = match.teamTwoScore
         teamOneScore.selectRow(Int(s1), inComponent: 0, animated: false)
         teamTwoScore.selectRow(Int(s2), inComponent: 0, animated: false)
+        
+        // Date
+        startDate.setDate(match.startDate!, animated: false)
     }
     
 
@@ -111,27 +118,12 @@ class EditMatchViewController: UIViewController {
             default:
                 fatalError()
             }
+            changePlayerVC.match = match
         }
     }
  
     
     // MARK: IBAction
-    @IBAction func unwindFromChangePlayerVC(segue: UIStoryboardSegue) {
-        
-    }
-    
-    @IBAction func toggleChoices(_ sender: Any) {
-        showChoices = !showChoices
-        
-        if showChoices {
-            optOutOne.isHidden = false
-            optOutTwo.isHidden = false
-        } else {
-            optOutOne.isHidden = true
-            optOutTwo.isHidden = true
-        }
-    }
-    
     @IBAction func stepScoreOne(_ sender: UIStepper) {
         let score = Int(sender.value)
         teamOneScore.selectRow(score, inComponent: 0, animated: true)
@@ -141,6 +133,22 @@ class EditMatchViewController: UIViewController {
         let score = Int(sender.value)
         teamTwoScore.selectRow(score, inComponent: 0, animated: true)
     }
+    
+    @IBAction func trash(_ sender: Any) {
+        let confirmAlert = UIAlertController(title: "Are you sure you want to delete this match?", message: nil, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            MatchRecorder.deleteMatch(self.match)
+            self.navigationController?.popViewController(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            confirmAlert.dismiss(animated: true)
+        }
+        
+        confirmAlert.addAction(cancelAction)
+        confirmAlert.addAction(confirmAction)
+        present(confirmAlert, animated: true)
+    }
+    
     
     @IBAction func save(_ sender: Any) {
         let s1 = teamOneScore.selectedRow(inComponent: 0)
@@ -158,13 +166,22 @@ class EditMatchViewController: UIViewController {
         }
         
         let finished = finishedScore(s1, s2)
+        
+        let sd = startDate.date
+        var ed: Date? = nil
+        if endDateSwitch.isOn {
+            ed = endDate.date
+        }
+        
         if finished {
-            let endDate = Date()
-            MatchRecorder.editMatch(match: match, endDate: endDate, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: finished)
+            if ed == nil {
+                ed = Date()
+            }
+            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: finished)
             navigationController?.popViewController(animated: true)
             return
         } else {
-            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: false)
+            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: false)
             navigationController?.popViewController(animated: true)
             return
         }
