@@ -44,7 +44,7 @@ class PlayerTableViewController: UIViewController {
             guard let editPlayerVC = segue.destination as? EditPlayerViewController else {
                 fatalError()
             }
-            editPlayerVC.playerToEdit = cell.player
+            editPlayerVC.player = cell.player
         }
     }
 
@@ -58,6 +58,32 @@ class PlayerTableViewController: UIViewController {
             present(mailVC, animated: true)
         }
     }
+    
+    @IBAction func load(_ sender: Any) {
+        let urlLoader = UIAlertController(title: "Enter the URL of JSON file", message: nil, preferredStyle: .alert)
+        urlLoader.addTextField { (textfield) in
+            textfield.returnKeyType = .done
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            urlLoader.dismiss(animated: true, completion: nil)
+        }
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { (action) in
+            if let text = urlLoader.textFields?.first?.text {
+                if let url = URL(string: text) {
+                    Downloader.load(URL: url)
+                }
+            }
+            
+            urlLoader.dismiss(animated: true, completion: nil)
+        }
+        
+        urlLoader.addAction(cancelAction)
+        urlLoader.addAction(submitAction)
+        
+        present(urlLoader, animated: true, completion: nil)
+    }
+    
+    
     @IBAction func addPlayer(_ sender: Any) {
         let newPlayerAlertController = UIAlertController(title: "New Player", message: nil, preferredStyle: .alert)
         
@@ -113,7 +139,7 @@ extension PlayerTableViewController: UITableViewDelegate, UITableViewDataSource 
     
     // MARK: Delegate
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .delete
+        return .none
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -164,15 +190,12 @@ extension PlayerTableViewController: UITableViewDelegate, UITableViewDataSource 
         if !player.privateAccount {
             let totalGames = MatchRecorder.getAllGames(fromPlayer: player)
             let wonGames = MatchRecorder.getAllWonMatches(fromPlayer: player)
-            let fearedGames = MatchRecorder.getAllFearedMatches(fromPlayer: player)
             cell.total.text = "\(totalGames.count)"
             cell.wins.text = "\(wonGames.count)"
-            cell.fears.text = "\(fearedGames.count)"
             cell.level.text = "\(player.level)"
         } else {
             cell.total.text = "-"
             cell.wins.text = "-"
-            cell.fears.text = "-"
             cell.level.text = "-"
         }
         

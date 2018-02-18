@@ -93,10 +93,6 @@ class MatchRecorder {
         newMatch.playerThreeID = playerThree?.id
         newMatch.playerFourID = playerFour?.id
         
-        newMatch.optOutOne = false
-        newMatch.optOutTwo = false
-        newMatch.optOutThree = false
-        newMatch.optOutFour = false
         newMatch.finished = false
         
         PersistentService.saveContext()
@@ -139,7 +135,7 @@ class MatchRecorder {
         fatalError()
     }
     
-    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, playerThreeID: String? = nil, playerFourID: String? = nil, startDate: Date? = nil, endDate: Date? = nil, optOutOne: Bool? = nil, optOutTwo: Bool? = nil, optOutThree: Bool? = nil, optOutFour: Bool? = nil, teamOneScore: Int? = nil, teamTwoScore: Int? = nil, finished: Bool? = nil) {
+    static func editMatch(match: Match, playerOneID: String? = nil, playerTwoID: String? = nil, playerThreeID: String? = nil, playerFourID: String? = nil, startDate: Date? = nil, endDate: Date? = nil, teamOneScore: Int? = nil, teamTwoScore: Int? = nil, finished: Bool? = nil) {
         
         if let playerOneID = playerOneID {
             match.playerOneID = playerOneID
@@ -153,24 +149,14 @@ class MatchRecorder {
         if let playerFourID = playerFourID {
             match.playerFourID = playerFourID
         }
+        
         if let startDate = startDate {
             match.startDate = startDate
         }
         if let endDate = endDate {
             match.endDate = endDate
         }
-        if let optOutOne = optOutOne {
-            match.optOutOne = optOutOne
-        }
-        if let optOutTwo = optOutTwo {
-            match.optOutTwo = optOutTwo
-        }
-        if let optOutThree = optOutThree {
-            match.optOutThree = optOutThree
-        }
-        if let optOutFour = optOutFour {
-            match.optOutFour = optOutFour
-        }
+        
         if let teamOneScore = teamOneScore {
             match.teamOneScore = Int16(teamOneScore)
         }
@@ -207,7 +193,7 @@ class MatchRecorder {
         guard let playerID = player.id else {
             fatalError()
         }
-        let playerPredicate = NSPredicate(format: "(playerOneID LIKE %@ OR playerTwoID LIKE %@ OR playerThreeID LIKE %@ OR playerFourID LIKE %@)" + ((nonOpt ?? false) ? " AND optOutOne == FALSE AND optOutTwo == FALSE AND optOutThree == FALSE AND optOutFour == FALSE" : ""), argumentArray: [playerID, playerID, playerID, playerID])
+        let playerPredicate = NSPredicate(format: "(playerOneID LIKE %@ OR playerTwoID LIKE %@ OR playerThreeID LIKE %@ OR playerFourID LIKE %@)", argumentArray: [playerID, playerID, playerID, playerID])
         fetchRequest.predicate = playerPredicate
         let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
@@ -230,28 +216,6 @@ class MatchRecorder {
         }
         let wonPredicate = NSPredicate(format: "((playerOneID LIKE %@ OR playerThreeID LIKE %@) AND teamOneScore > teamTwoScore) OR ((playerTwoID LIKE %@ OR playerFourID LIKE %@) AND teamTwoScore > teamOneScore)", argumentArray: [playerID, playerID, playerID, playerID])
         fetchRequest.predicate = wonPredicate
-        let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
-        fetchRequest.sortDescriptors = [dateSort]
-        do {
-            let searchResults = try context.fetch(fetchRequest)
-            
-            return searchResults
-        } catch {
-            print("Error: \(error)")
-        }
-        fatalError()
-    }
-    
-    static func getAllFearedMatches(fromPlayer player: Player) -> [Match] {
-        let context = PersistentService.context
-        
-        let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
-        guard let playerID = player.id else {
-            fatalError()
-        }
-        // TODO: Fix
-        let fearedPredicate = NSPredicate(format: "(playerOneID like %@ AND optOutOne == FALSE AND optOutTwo == TRUE) OR (playerTwoID like %@ AND optOutOne == TRUE AND optOutTwo == FALSE)", argumentArray: [playerID, playerID])
-        fetchRequest.predicate = fearedPredicate
         let dateSort = NSSortDescriptor(key: "startDate", ascending: false)
         fetchRequest.sortDescriptors = [dateSort]
         do {

@@ -11,7 +11,7 @@ import UIKit
 class EditPlayerViewController: UIViewController {
 
     // MARK: Properties
-    var playerToEdit: Player!
+    var player: Player!
     
     @IBOutlet weak var active: UISwitch!
     @IBOutlet weak var privateAccount: UISwitch!
@@ -39,17 +39,33 @@ class EditPlayerViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        active.isOn = playerToEdit.active
-        privateAccount.isOn = playerToEdit.privateAccount
-        nickname.text = playerToEdit.nickname
-        firstName.text = playerToEdit.firstName
-        lastName.text = playerToEdit.lastName
-        id.text = playerToEdit.id
+        active.isOn = player.active
+        privateAccount.isOn = player.privateAccount
+        nickname.text = player.nickname
+        firstName.text = player.firstName
+        lastName.text = player.lastName
+        id.text = player.id
     }
     
     // MARK: IBActions
+    
+    @IBAction func trash(_ sender: Any) {
+        let confirmAlert = UIAlertController(title: "Are you sure you want to delete this player?", message: nil, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            PlayerRecorder.deletePlayer(self.player)
+            self.dismiss(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            confirmAlert.dismiss(animated: true)
+        }
+        
+        confirmAlert.addAction(cancelAction)
+        confirmAlert.addAction(confirmAction)
+        present(confirmAlert, animated: true)
+    }
+    
     @IBAction func save(_ sender: Any) {
-        if PlayerRecorder.editPlayer(player: playerToEdit, newID: id.text, active: active.isOn, privateAccount: privateAccount.isOn, nickname: nickname.text, firstName: firstName.text, lastName: lastName.text) {
+        if PlayerRecorder.editPlayer(player: player, newID: id.text, active: active.isOn, privateAccount: privateAccount.isOn, nickname: nickname.text, firstName: firstName.text, lastName: lastName.text) {
             dismiss(animated: true)
         }
     }

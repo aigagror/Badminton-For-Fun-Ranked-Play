@@ -47,16 +47,14 @@ class Exporter {
                 let rfcDF = DateFormatter.RFC3339DateFormatter
                 matchTuple["startDate"] = rfcDF.string(from: match.startDate!)
                 matchTuple["endDate"] = rfcDF.string(from: match.endDate!)
+                
                 matchTuple["finished"] = match.finished
-                matchTuple["optOutOne"] = match.optOutOne
-                matchTuple["optOutTwo"] = match.optOutTwo
-                matchTuple["optOutThree"] = match.optOutThree
-                matchTuple["optOutFour"] = match.optOutFour
+                
                 matchTuple["playerOneID"] = match.playerOneID
                 matchTuple["playerTwoID"] = match.playerTwoID
-                
                 matchTuple["playerThreeID"] = match.playerThreeID
                 matchTuple["playerFourID"] = match.playerFourID
+                
                 matchTuple["teamOneScore"] = match.teamOneScore
                 matchTuple["teamTwoScore"] = match.teamTwoScore
                 

@@ -18,18 +18,16 @@ class EditMatchViewController: UIViewController {
     @IBOutlet weak var endDate: UIDatePicker!
     @IBOutlet weak var endDateSwitch: UISwitch!
     
-    @IBOutlet weak var optOutOne: UISwitch!
-    @IBOutlet weak var optOutTwo: UISwitch!
-    @IBOutlet weak var optOutThree: UISwitch!
-    @IBOutlet weak var optOutFour: UISwitch!
     @IBOutlet weak var nameOne: UILabel!
     @IBOutlet weak var nameTwo: UILabel!
     @IBOutlet weak var nameThree: UILabel!
     @IBOutlet weak var nameFour: UILabel!
+    
     @IBOutlet weak var idOne: UILabel!
     @IBOutlet weak var idTwo: UILabel!
     @IBOutlet weak var idThree: UILabel!
     @IBOutlet weak var idFour: UILabel!
+    
     @IBOutlet weak var teamOneScore: UIPickerView!
     @IBOutlet weak var teamTwoScore: UIPickerView!
     @IBOutlet weak var stepScoreOne: UIStepper!
@@ -71,18 +69,10 @@ class EditMatchViewController: UIViewController {
             nameFour.text = playerFour.name
             idThree.text = playerThree.id
             idFour.text = playerFour.id
-            optOutThree.setOn(match.optOutThree, animated: false)
-            optOutFour.setOn(match.optOutFour, animated: false)
         } else {
             playerThreeContainer.isHidden = true
             playerFourContainer.isHidden = true
         }
-        
-        let o1 = match.optOutOne
-        let o2 = match.optOutTwo
-        
-        optOutOne.setOn(o1, animated: false)
-        optOutTwo.setOn(o2, animated: false)
         
         nameOne.text = playerOne.name
         nameTwo.text = playerTwo.name
@@ -95,6 +85,9 @@ class EditMatchViewController: UIViewController {
         
         // Date
         startDate.setDate(match.startDate!, animated: false)
+        if let ed = match.endDate {
+            endDate.setDate(ed, animated: false)
+        }
     }
     
 
@@ -154,17 +147,6 @@ class EditMatchViewController: UIViewController {
         let s1 = teamOneScore.selectedRow(inComponent: 0)
         let s2 = teamTwoScore.selectedRow(inComponent: 0)
         
-        let o1 = optOutOne.isOn
-        let o2 = optOutTwo.isOn
-        let o3 = optOutThree.isOn
-        let o4 = optOutFour.isOn
-        
-        if o1 || o2 || o3 || o4 {
-            MatchRecorder.editMatch(match: match, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, finished: true)
-            navigationController?.popViewController(animated: true)
-            return
-        }
-        
         let finished = finishedScore(s1, s2)
         
         let sd = startDate.date
@@ -177,11 +159,11 @@ class EditMatchViewController: UIViewController {
             if ed == nil {
                 ed = Date()
             }
-            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: finished)
+            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, teamOneScore: s1, teamTwoScore: s2, finished: finished)
             navigationController?.popViewController(animated: true)
             return
         } else {
-            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, optOutOne: o1, optOutTwo: o2, optOutThree: o3, optOutFour: o4, teamOneScore: s1, teamTwoScore: s2, finished: false)
+            MatchRecorder.editMatch(match: match, startDate: sd, endDate: ed, teamOneScore: s1, teamTwoScore: s2, finished: false)
             navigationController?.popViewController(animated: true)
             return
         }

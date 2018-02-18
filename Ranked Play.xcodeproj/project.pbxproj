@@ -11,6 +11,7 @@
 		2C014480202D743500831CE7 /* EditMatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C01447F202D743500831CE7 /* EditMatchViewController.swift */; };
 		2C014484202D7C5400831CE7 /* MatchRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C014483202D7C5400831CE7 /* MatchRecorder.swift */; };
 		2C014486202D80E900831CE7 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C014485202D80E900831CE7 /* Player.swift */; };
+		2C0505F8203A306200453D0E /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0505F7203A306200453D0E /* Downloader.swift */; };
 		2C3BC5AF202D38B200EDE694 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5AE202D38B200EDE694 /* AppDelegate.swift */; };
 		2C3BC5B1202D38B200EDE694 /* PlayerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3BC5B0202D38B200EDE694 /* PlayerTableViewController.swift */; };
 		2C3BC5B6202D38B200EDE694 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C3BC5B4202D38B200EDE694 /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 		2C01447F202D743500831CE7 /* EditMatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMatchViewController.swift; sourceTree = "<group>"; };
 		2C014483202D7C5400831CE7 /* MatchRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchRecorder.swift; sourceTree = "<group>"; };
 		2C014485202D80E900831CE7 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		2C0505F7203A306200453D0E /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		2C3BC5AB202D38B200EDE694 /* Ranked Play.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ranked Play.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C3BC5AE202D38B200EDE694 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C3BC5B0202D38B200EDE694 /* PlayerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				2C62A2582037AF5800A277D1 /* Date.swift */,
 				2C3BC5AE202D38B200EDE694 /* AppDelegate.swift */,
 				2C580DC3202E65E800186161 /* Exporter.swift */,
+				2C0505F7203A306200453D0E /* Downloader.swift */,
 				2C580DC5202E66C500186161 /* DateFormatter.swift */,
 				2C62A25A2037B51100A277D1 /* TimeInterval.swift */,
 				2C3BC5D8202D4F1100EDE694 /* ViewControllers */,
@@ -293,6 +296,7 @@
 				2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */,
 				2C014480202D743500831CE7 /* EditMatchViewController.swift in Sources */,
 				2C3BC5D1202D3B5600EDE694 /* PlayerTableViewCell.swift in Sources */,
+				2C0505F8203A306200453D0E /* Downloader.swift in Sources */,
 				2C014486202D80E900831CE7 /* Player.swift in Sources */,
 				2C62A2572037AD7A00A277D1 /* MatchesCollectionViewController.swift in Sources */,
 				2C62A2552037AD3000A277D1 /* MatchCollectionViewCell.swift in Sources */,

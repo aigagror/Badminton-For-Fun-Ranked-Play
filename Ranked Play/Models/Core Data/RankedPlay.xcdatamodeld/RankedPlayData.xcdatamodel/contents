@@ -3,10 +3,6 @@
     <entity name="Match" representedClassName="Match" syncable="YES" codeGenerationType="class">
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="finished" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="optOutFour" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="optOutOne" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="optOutThree" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="optOutTwo" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="playerFourID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="playerOneID" attributeType="String" syncable="YES"/>
         <attribute name="playerThreeID" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,10 +19,9 @@
         <attribute name="level" attributeType="Integer 32" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="privateAccount" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="matches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Match" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Match" positionX="313" positionY="36" width="128" height="240"/>
-        <element name="Player" positionX="-63" positionY="-18" width="128" height="163"/>
+        <element name="Match" positionX="313" positionY="36" width="128" height="180"/>
+        <element name="Player" positionX="-63" positionY="-18" width="128" height="150"/>
     </elements>
 </model>
