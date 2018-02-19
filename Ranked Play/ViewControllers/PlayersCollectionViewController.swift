@@ -1,27 +1,25 @@
 //
-//  FirstViewController.swift
+//  PlayerCollectionViewController.swift
 //  Ranked Play
 //
-//  Created by Edward Huang on 2/8/18.
+//  Created by Edward Huang on 2/18/18.
 //  Copyright © 2018 Eddie Huang. All rights reserved.
 //
 
 import UIKit
 import MessageUI
 
-class PlayerTableViewController: UIViewController {
+private let reuseIdentifier = "player_cell"
 
-    // MARK: Properties
-    @IBOutlet weak var tableView: UITableView!
-    
-    // MARK: Life Cycle
+class PlayersCollectionViewController: UICollectionViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        // Delegation and Data Source
-        tableView.dataSource = self
-        tableView.delegate = self
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Do any additional setup after loading the view.
         
         // Watch for any changes to the context
         NotificationCenter.default.addObserver(self, selector: #selector(receivedContextChangedNotification), name: .NSManagedObjectContextDidSave, object: nil)
@@ -31,13 +29,20 @@ class PlayerTableViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
         if segue.identifier == "edit_player" {
-            guard let indexPath = tableView.indexPathForSelectedRow else {
+            
+            guard let indexPath = collectionView?.indexPathsForSelectedItems?.first else {
                 fatalError()
             }
-            guard let cell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
+            guard let cell = collectionView?.cellForItem(at: indexPath) as? PlayerCollectionViewCell else {
                 fatalError()
             }
             
@@ -47,11 +52,9 @@ class PlayerTableViewController: UIViewController {
             editPlayerVC.player = cell.player
         }
     }
-
-    // MARK: IBAction
-    @IBAction func deactivateAll(_ sender: Any) {
-        PlayerRecorder.deactivateAll()
-    }
+ 
+    
+    // MARK: IBActions
     
     @IBAction func export(_ sender: Any) {
         if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
@@ -83,6 +86,9 @@ class PlayerTableViewController: UIViewController {
         present(urlLoader, animated: true, completion: nil)
     }
     
+    @IBAction func deactivateAll(_ sender: Any) {
+        PlayerRecorder.deactivateAll()
+    }
     
     @IBAction func addPlayer(_ sender: Any) {
         let newPlayerAlertController = UIAlertController(title: "New Player", message: nil, preferredStyle: .alert)
@@ -132,111 +138,96 @@ class PlayerTableViewController: UIViewController {
     @objc
     private func receivedContextChangedNotification() {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            self.collectionView?.reloadData()
         }
     }
-}
-
-extension PlayerTableViewController: UITableViewDelegate, UITableViewDataSource {
     
-    // MARK: Delegate
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
-    }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
+    // MARK: UICollectionViewDataSource
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "player_header", for: indexPath) as? PlayerHeaderCollectionReusableView else {
             fatalError()
         }
         
-        let player = cell.player!
-        tableView.beginUpdates()
-        let matchesWithPlayer = MatchRecorder.getAllMatches(fromPlayer: player)
-        for match in matchesWithPlayer {
-            MatchRecorder.deleteMatch(match)
+        if indexPath.section == 0 {
+            headerView.activeLabel.text = "Active"
+        } else {
+            headerView.activeLabel.text = "Inactive"
         }
-        PlayerRecorder.deletePlayer(player)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        tableView.endUpdates()
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let oldActive = sourceIndexPath.section == 0
-        let newActive = destinationIndexPath.section == 0
-
-        let row = sourceIndexPath.row
         
-        let player = PlayerRecorder.getPlayer(forIndex: row, active: oldActive)
-        player.active = newActive
+        return headerView
     }
-    
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
+
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 2
     }
-    
-    // MARK: Data Source
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let active = indexPath.section == 0
+
+
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of items
+        let active = section == 0
         let players = PlayerRecorder.getAllPlayers(active: active)
-        let row = indexPath.row
-        let player = players[row]
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "player_cell") as? PlayerTableViewCell else {
-            fatalError()
-        }
-        
-        cell.player = player
-        
-        cell.name.text = player.name
-        cell.id.text = player.id
-        if !player.privateAccount {
-            let totalGames = MatchRecorder.getAllMatches(fromPlayer: player)
-            let wonGames = MatchRecorder.getAllWonMatches(fromPlayer: player)
-            cell.total.text = "\(totalGames.count)"
-            cell.wins.text = "\(wonGames.count)"
-            cell.level.text = "\(player.level)"
-        } else {
-            cell.total.text = "-"
-            cell.wins.text = "-"
-            cell.level.text = "-"
-        }
-        
-        
-        if player.active {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var players: [Player] = []
-        if section == 0 {
-            players = PlayerRecorder.getAllPlayers(active: true)
-        } else if section == 1 {
-            players = PlayerRecorder.getAllPlayers(active: false)
-        }
         
         return players.count
     }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Active"
-        } else if section == 1 {
-            return "Inactive"
+
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PlayerCollectionViewCell else {
+            fatalError()
         }
-        return nil
-    }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        // Configure the cell
+        let player = PlayerRecorder.getPlayer(forIndexPath: indexPath)
+        cell.player = player
+        
+        let wonMatches = MatchRecorder.getAllWonMatches(fromPlayer: player)
+        let allMatches = MatchRecorder.getAllMatches(fromPlayer: player)
+        
+        cell.id.text = player.id
+        cell.name.text = player.name
+        cell.wins.text = "\(wonMatches.count)"
+        cell.total.text = "\(allMatches.count)"
+        cell.level.text = "\(player.level)"
+    
+        return cell
     }
+
+    // MARK: UICollectionViewDelegate
+
+    /*
+    // Uncomment this method to specify if the specified item should be highlighted during tracking
+    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    */
+
+    /*
+    // Uncomment this method to specify if the specified item should be selected
+    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    */
+
+    /*
+    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
+    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        return false
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+    
+    }
+    */
+
 }
 
-extension PlayerTableViewController: MFMailComposeViewControllerDelegate {
+extension PlayersCollectionViewController: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }

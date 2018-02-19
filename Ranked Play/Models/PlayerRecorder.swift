@@ -206,4 +206,9 @@ class PlayerRecorder {
         let players = getAllPlayers(active: active)
         return players[i]
     }
+    
+    static func getPlayer(forIndexPath i: IndexPath) -> Player {
+        let active = i.section == 0
+        return getPlayer(forIndex: i.row, active: active)
+    }
 }

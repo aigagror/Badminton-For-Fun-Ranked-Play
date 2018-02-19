@@ -30,6 +30,9 @@
 		2C62A25B2037B51100A277D1 /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62A25A2037B51100A277D1 /* TimeInterval.swift */; };
 		2C62A25D2037BFF400A277D1 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62A25C2037BFF400A277D1 /* File.swift */; };
 		2C7FC38F203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC38E203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift */; };
+		2C7FC391203A52C000FAAE52 /* PlayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC390203A52C000FAAE52 /* PlayerCollectionViewCell.swift */; };
+		2C7FC393203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC392203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift */; };
+		2C7FC395203A53E800FAAE52 /* PlayersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC394203A53E800FAAE52 /* PlayersCollectionViewController.swift */; };
 		2CF45CAA2037E9EA0090D7A7 /* MatchCollectionCellMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF45CA92037E9EA0090D7A7 /* MatchCollectionCellMainView.swift */; };
 		2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */; };
 		2CF6CC6B202F75D90020D399 /* LevelCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF6CC6A202F75D90020D399 /* LevelCalculator.swift */; };
@@ -73,6 +76,9 @@
 		2C62A25A2037B51100A277D1 /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		2C62A25C2037BFF400A277D1 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		2C7FC38E203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		2C7FC390203A52C000FAAE52 /* PlayerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCollectionViewCell.swift; sourceTree = "<group>"; };
+		2C7FC392203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		2C7FC394203A53E800FAAE52 /* PlayersCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersCollectionViewController.swift; sourceTree = "<group>"; };
 		2CF45CA92037E9EA0090D7A7 /* MatchCollectionCellMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCollectionCellMainView.swift; sourceTree = "<group>"; };
 		2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePlayerTableViewController.swift; sourceTree = "<group>"; };
 		2CF6CC6A202F75D90020D399 /* LevelCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCalculator.swift; sourceTree = "<group>"; };
@@ -157,6 +163,7 @@
 		2C3BC5D8202D4F1100EDE694 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2C7FC394203A53E800FAAE52 /* PlayersCollectionViewController.swift */,
 				2C62A2562037AD7A00A277D1 /* MatchesCollectionViewController.swift */,
 				2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */,
 				2C01447F202D743500831CE7 /* EditMatchViewController.swift */,
@@ -169,8 +176,10 @@
 		2C3BC5D9202D4F1A00EDE694 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2C7FC38E203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift */,
 				2C3BC5B4202D38B200EDE694 /* Main.storyboard */,
+				2C7FC38E203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift */,
+				2C7FC392203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift */,
+				2C7FC390203A52C000FAAE52 /* PlayerCollectionViewCell.swift */,
 				2C62A2542037AD3000A277D1 /* MatchCollectionViewCell.swift */,
 				2CF45CA92037E9EA0090D7A7 /* MatchCollectionCellMainView.swift */,
 				2C3BC5D0202D3B5600EDE694 /* PlayerTableViewCell.swift */,
@@ -294,6 +303,7 @@
 				2C3BC5D4202D4BD900EDE694 /* RankedPlay.xcdatamodeld in Sources */,
 				2C62A25B2037B51100A277D1 /* TimeInterval.swift in Sources */,
 				2C580DC4202E65E800186161 /* Exporter.swift in Sources */,
+				2C7FC393203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift in Sources */,
 				2CF6CC6B202F75D90020D399 /* LevelCalculator.swift in Sources */,
 				2C3BC5DB202D531200EDE694 /* PersistentService.swift in Sources */,
 				2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */,
@@ -305,6 +315,7 @@
 				2C62A2552037AD3000A277D1 /* MatchCollectionViewCell.swift in Sources */,
 				2CF45CAA2037E9EA0090D7A7 /* MatchCollectionCellMainView.swift in Sources */,
 				2C01447E202D6A5400831CE7 /* EditPlayerViewController.swift in Sources */,
+				2C7FC395203A53E800FAAE52 /* PlayersCollectionViewController.swift in Sources */,
 				2C014484202D7C5400831CE7 /* MatchRecorder.swift in Sources */,
 				2C3BC5AF202D38B200EDE694 /* AppDelegate.swift in Sources */,
 				2C7FC38F203A486600FAAE52 /* MatchHeaderCollectionReusableView.swift in Sources */,
@@ -312,6 +323,7 @@
 				2C62A25D2037BFF400A277D1 /* File.swift in Sources */,
 				2C62A2592037AF5800A277D1 /* Date.swift in Sources */,
 				2C3BC5D6202D4EFF00EDE694 /* PlayerRecorder.swift in Sources */,
+				2C7FC391203A52C000FAAE52 /* PlayerCollectionViewCell.swift in Sources */,
 				2C3BC5B1202D38B200EDE694 /* PlayerTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

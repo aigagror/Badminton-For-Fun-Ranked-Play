@@ -186,7 +186,7 @@ class MatchRecorder {
     ///
     /// - Parameter player: player involved
     /// - Returns: list of all non-opted games
-    static func getAllGames(fromPlayer player: Player, nonOpt: Bool? = nil) -> [Match] {
+    static func getAllMatches(fromPlayer player: Player) -> [Match] {
         let context = PersistentService.context
         
         let fetchRequest = NSFetchRequest<Match>(entityName: Match.description())
