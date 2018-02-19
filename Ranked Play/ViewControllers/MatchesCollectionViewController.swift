@@ -92,8 +92,23 @@ class MatchesCollectionViewController: UICollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return MatchRecorder.getNumberOfSections()
     }
-
-
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "match_header", for: indexPath) as? MatchHeaderCollectionReusableView else {
+            fatalError()
+        }
+        
+        let date = Date.dateSince(numberOfDaysHavePassed: -indexPath.section)
+        
+        let df = DateFormatter()
+        df.timeStyle = .none
+        df.dateStyle = .long
+        
+        headerView.date.text = df.string(from: date)
+        
+        return headerView
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let matches = MatchRecorder.getAllMatches(forSection: section)
         return matches.count
@@ -130,11 +145,29 @@ class MatchesCollectionViewController: UICollectionViewController {
         cell.teamOneScore.text = "\(match.teamOneScore)"
         cell.teamTwoScore.text = "\(match.teamTwoScore)"
         
+        if match.teamOneScore < match.teamTwoScore {
+            cell.teamOneScore.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            cell.teamTwoScore.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+        } else {
+            cell.teamTwoScore.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            cell.teamOneScore.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
+        }
+        
         let playerOne = PlayerRecorder.getPlayer(withID: match.playerOneID!)
         let playerTwo = PlayerRecorder.getPlayer(withID: match.playerTwoID!)
         
-        cell.playerOneName.text = playerOne.name
-        cell.playerTwoName.text = playerTwo.name
+        let configureNameLabel = {(label: UILabel, player: Player) in
+            if player.privateAccount {
+                label.text = "-"
+                label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            } else {
+                label.text = player.name
+                label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            }
+        }
+        
+        configureNameLabel(cell.playerOneName, playerOne)
+        configureNameLabel(cell.playerTwoName, playerTwo)
         
         if let playerThreeID = match.playerThreeID, let playerFourID = match.playerFourID {
             cell.playerThreeName.isHidden = false
@@ -143,8 +176,8 @@ class MatchesCollectionViewController: UICollectionViewController {
             let playerThree = PlayerRecorder.getPlayer(withID: playerThreeID)
             let playerFour = PlayerRecorder.getPlayer(withID: playerFourID)
             
-            cell.playerThreeName.text = playerThree.name
-            cell.playerFourName.text = playerFour.name
+            configureNameLabel(cell.playerThreeName, playerThree)
+            configureNameLabel(cell.playerFourName, playerFour)
         } else {
             cell.playerThreeName.isHidden = true
             cell.playerFourName.isHidden = true

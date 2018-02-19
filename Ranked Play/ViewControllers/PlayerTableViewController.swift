@@ -131,7 +131,9 @@ class PlayerTableViewController: UIViewController {
     // MARK: Private Functions
     @objc
     private func receivedContextChangedNotification() {
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 

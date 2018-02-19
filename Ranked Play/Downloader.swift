@@ -41,7 +41,7 @@ class Downloader {
                 PersistentService.WIPE_EVERYTHING()
                 
                 let matchesJSON: [[String: Any]] = JSON["Matches"]!
-                let playersJSON: [[String: Any]] = JSON["Player"]!
+                let playersJSON: [[String: Any]] = JSON["Players"]!
                 
                 for player in playersJSON {
                     
@@ -51,7 +51,10 @@ class Downloader {
                     
                     // Necessary
                     let id = player["id"] as! String
-                    let privateAccount = player["privateAcount"] as! Bool
+                    guard let privateAccountData = player["privateAccount"] else {
+                        fatalError()
+                    }
+                    let privateAccount = privateAccountData as! Bool
                     
                     _ = PlayerRecorder.addPlayer(firstName: firstName, lastName: lastName, nickname: nickname, id: id, privateAccount: privateAccount)
                 }
