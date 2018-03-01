@@ -388,7 +388,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="218" height="109"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="VJP-6K-etd">
-                                                    <rect key="frame" x="0.0" y="10" width="218" height="89"/>
+                                                    <rect key="frame" x="10" y="10" width="218" height="89"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="nrl-sg-lcC">
                                                             <rect key="frame" x="0.0" y="0.0" width="109" height="89"/>
@@ -408,7 +408,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bur-R7-77Y">
-                                                            <rect key="frame" x="109" y="0.0" width="109" height="89"/>
+                                                            <rect key="frame" x="99" y="0.0" width="109" height="89"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="1gL-by-5G6">
                                                                     <rect key="frame" x="0.0" y="0.0" width="109" height="44.5"/>
@@ -587,7 +587,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hn1-td-L0S" customClass="MatchCollectionCellMainView" customModule="Ranked_Play" customModuleProvider="target">
-                                            <rect key="frame" x="-10" y="0.0" width="192" height="179"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="192" height="179"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ptb-Ti-EQA">
                                                     <rect key="frame" x="10" y="10" width="192" height="159"/>
@@ -620,7 +620,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="749" verticalCompressionResistancePriority="1000" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9s-eI-G3e">
-                                                                    <rect key="frame" x="96" y="0.0" width="96" height="63.5"/>
+                                                                    <rect key="frame" x="86" y="0.0" width="96" height="63.5"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="50"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -637,7 +637,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="1000" text="Player 2" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Y1-FP-u8M">
-                                                                    <rect key="frame" x="96" y="0.0" width="96" height="20.5"/>
+                                                                    <rect key="frame" x="86" y="0.0" width="96" height="20.5"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -654,7 +654,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" text="Player 4" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Z5-ea-0qf">
-                                                                    <rect key="frame" x="96" y="0.0" width="96" height="20.5"/>
+                                                                    <rect key="frame" x="86" y="0.0" width="96" height="20.5"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>

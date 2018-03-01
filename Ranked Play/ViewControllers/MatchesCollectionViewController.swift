@@ -31,16 +31,38 @@ class MatchesCollectionViewController: UICollectionViewController {
     // MARK: - Navigation
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        
+        var notEnoughPlayersAlert: UIAlertController {
+            let activeFreePlayers = PlayerRecorder.getAllPlayers(active: true, free: true)
+            
+            let alert = UIAlertController(title: "Not enough active players", message: "Only \(activeFreePlayers.count) players are free and active", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                alert.dismiss(animated: true)
+            }
+            
+            alert.addAction(okAction)
+            return alert
+        }
+        
         if identifier == "edit_match" {
             return true
         }
-        if identifier == "new_singles_match" {
-            return PlayerRecorder.generateMatch(numberOfPlayers: 2) != nil
+        let numberOfPlayers: Int
+        switch identifier {
+        case "new_singles_match":
+            numberOfPlayers = 2
+        case "new_doubles_match":
+            numberOfPlayers = 4
+        default:
+            return false
         }
-        if identifier == "new_doubles_match" {
-            return PlayerRecorder.generateMatch(numberOfPlayers: 4) != nil
+        
+        let result = PlayerRecorder.generateMatch(numberOfPlayers: numberOfPlayers) != nil
+        if result == false {
+            let alert = notEnoughPlayersAlert
+            present(alert, animated: true)
         }
-        return false
+        return result
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
