@@ -13,8 +13,6 @@ class Exporter {
     static func getExportJournalMailComposerVC(delegate: MFMailComposeViewControllerDelegate) -> MFMailComposeViewController? {
         //Check to see the device can send email.
         if( MFMailComposeViewController.canSendMail() ) {
-            print("Can send email.")
-            
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = delegate
             
@@ -75,7 +73,7 @@ class Exporter {
             }
             
             
-            mailComposer.addAttachmentData(jsonData, mimeType: "text/plain", fileName: "journalJSON")
+            mailComposer.addAttachmentData(jsonData, mimeType: "text/plain", fileName: "dataJSON.json")
             
             return mailComposer
         }

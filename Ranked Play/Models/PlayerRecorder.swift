@@ -202,6 +202,14 @@ class PlayerRecorder {
         PersistentService.saveContext()
     }
     
+    static func activateAll() {
+        let allPlayers = getAllPlayers()
+        for player in allPlayers {
+            player.active = true
+        }
+        PersistentService.saveContext()
+    }
+    
     static func getPlayer(forIndex i: Int, active: Bool? = nil) -> Player {
         let players = getAllPlayers(active: active)
         return players[i]

@@ -33,6 +33,8 @@
 		2C7FC391203A52C000FAAE52 /* PlayerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC390203A52C000FAAE52 /* PlayerCollectionViewCell.swift */; };
 		2C7FC393203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC392203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift */; };
 		2C7FC395203A53E800FAAE52 /* PlayersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7FC394203A53E800FAAE52 /* PlayersCollectionViewController.swift */; };
+		2CC8C01820479D24000494BB /* dataJSON.json in Resources */ = {isa = PBXBuildFile; fileRef = 2CC8C01720479D24000494BB /* dataJSON.json */; };
+		2CC8C01A20479D53000494BB /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC8C01920479D53000494BB /* JSON.swift */; };
 		2CF45CAA2037E9EA0090D7A7 /* MatchCollectionCellMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF45CA92037E9EA0090D7A7 /* MatchCollectionCellMainView.swift */; };
 		2CF6CC69202E8A820020D399 /* ChangePlayerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */; };
 		2CF6CC6B202F75D90020D399 /* LevelCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF6CC6A202F75D90020D399 /* LevelCalculator.swift */; };
@@ -79,6 +81,8 @@
 		2C7FC390203A52C000FAAE52 /* PlayerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCollectionViewCell.swift; sourceTree = "<group>"; };
 		2C7FC392203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		2C7FC394203A53E800FAAE52 /* PlayersCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersCollectionViewController.swift; sourceTree = "<group>"; };
+		2CC8C01720479D24000494BB /* dataJSON.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dataJSON.json; path = "../../../../../../Library/Containers/com.apple.mail/Data/Library/Mail Downloads/AF4D9D41-0CE6-44CF-9B74-D089D30FA528/dataJSON.json"; sourceTree = "<group>"; };
+		2CC8C01920479D53000494BB /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		2CF45CA92037E9EA0090D7A7 /* MatchCollectionCellMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCollectionCellMainView.swift; sourceTree = "<group>"; };
 		2CF6CC68202E8A820020D399 /* ChangePlayerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePlayerTableViewController.swift; sourceTree = "<group>"; };
 		2CF6CC6A202F75D90020D399 /* LevelCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelCalculator.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				2C3BC5AE202D38B200EDE694 /* AppDelegate.swift */,
 				2C580DC3202E65E800186161 /* Exporter.swift */,
 				2C0505F7203A306200453D0E /* Downloader.swift */,
+				2CC8C01920479D53000494BB /* JSON.swift */,
 				2C580DC5202E66C500186161 /* DateFormatter.swift */,
 				2C62A25A2037B51100A277D1 /* TimeInterval.swift */,
 				2C3BC5D8202D4F1100EDE694 /* ViewControllers */,
@@ -152,6 +157,7 @@
 		2C3BC5D7202D4F0600EDE694 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2CC8C01720479D24000494BB /* dataJSON.json */,
 				2C014483202D7C5400831CE7 /* MatchRecorder.swift */,
 				2C3BC5D5202D4EFF00EDE694 /* PlayerRecorder.swift */,
 				2CF6CC6A202F75D90020D399 /* LevelCalculator.swift */,
@@ -282,6 +288,7 @@
 			files = (
 				2C3BC5BB202D38B200EDE694 /* LaunchScreen.storyboard in Resources */,
 				2C3BC5B8202D38B200EDE694 /* Assets.xcassets in Resources */,
+				2CC8C01820479D24000494BB /* dataJSON.json in Resources */,
 				2C3BC5B6202D38B200EDE694 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C3BC5D4202D4BD900EDE694 /* RankedPlay.xcdatamodeld in Sources */,
+				2CC8C01A20479D53000494BB /* JSON.swift in Sources */,
 				2C62A25B2037B51100A277D1 /* TimeInterval.swift in Sources */,
 				2C580DC4202E65E800186161 /* Exporter.swift in Sources */,
 				2C7FC393203A52FE00FAAE52 /* PlayerHeaderCollectionReusableView.swift in Sources */,
@@ -478,10 +486,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FB436C8524;
+				DEVELOPMENT_TEAM = CNVS5VG567;
 				INFOPLIST_FILE = "Ranked Play/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aigagror.Ranked-Play";
+				PRODUCT_BUNDLE_IDENTIFIER = "aigagror.Ranked-Play";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -493,10 +501,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FB436C8524;
+				DEVELOPMENT_TEAM = CNVS5VG567;
 				INFOPLIST_FILE = "Ranked Play/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aigagror.Ranked-Play";
+				PRODUCT_BUNDLE_IDENTIFIER = "aigagror.Ranked-Play";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

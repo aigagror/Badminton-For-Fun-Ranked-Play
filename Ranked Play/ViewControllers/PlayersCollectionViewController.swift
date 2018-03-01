@@ -12,6 +12,8 @@ import MessageUI
 private let reuseIdentifier = "player_cell"
 
 class PlayersCollectionViewController: UICollectionViewController {
+    
+    var activateAll = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +59,42 @@ class PlayersCollectionViewController: UICollectionViewController {
     // MARK: IBActions
     
     @IBAction func export(_ sender: Any) {
-        if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
-            present(mailVC, animated: true)
+        
+        let actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
+        
+        let mailAction = UIAlertAction(title: "Export", style: .default) { (action) in
+            if let mailVC = Exporter.getExportJournalMailComposerVC(delegate: self) {
+                self.present(mailVC, animated: true)
+                actionSheet.dismiss(animated: true)
+            }
         }
+        
+        let resetDataAction = UIAlertAction(title: "Reset", style: .destructive) { (action) in
+            // Load option
+            let loadInitialActionController = UIAlertController(title: "Load the initial data?", message: "This will reset everything back to the data from February 10th?", preferredStyle: .alert)
+            let confirmAction = UIAlertAction(title: "Confirm", style: .default) { (action) in
+                JSON.readJson()
+                loadInitialActionController.dismiss(animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+                loadInitialActionController.dismiss(animated: true)
+            }
+            loadInitialActionController.addAction(cancelAction)
+            loadInitialActionController.addAction(confirmAction)
+            
+            self.present(loadInitialActionController, animated: true)
+            actionSheet.dismiss(animated: true)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            actionSheet.dismiss(animated: true)
+        }
+        
+        actionSheet.addAction(mailAction)
+        actionSheet.addAction(resetDataAction)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true)
     }
     
     @IBAction func load(_ sender: Any) {
@@ -86,8 +121,19 @@ class PlayersCollectionViewController: UICollectionViewController {
         present(urlLoader, animated: true, completion: nil)
     }
     
-    @IBAction func deactivateAll(_ sender: Any) {
-        PlayerRecorder.deactivateAll()
+    @IBAction func toggleActivityOfEveryone(_ sender: UIBarButtonItem) {
+        if activateAll {
+            PlayerRecorder.activateAll()
+        } else {
+            PlayerRecorder.deactivateAll()
+        }
+        activateAll = !activateAll
+        
+        if (activateAll) {
+            sender.title = "Activate"
+        } else {
+            sender.title = "Deactivate"
+        }
     }
     
     @IBAction func addPlayer(_ sender: Any) {
