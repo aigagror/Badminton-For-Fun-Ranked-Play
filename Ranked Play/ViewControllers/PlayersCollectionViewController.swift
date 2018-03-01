@@ -58,7 +58,7 @@ class PlayersCollectionViewController: UICollectionViewController {
     
     // MARK: IBActions
     
-    @IBAction func export(_ sender: Any) {
+    @IBAction func presentActions(_ sender: Any) {
         
         let actionSheet = UIAlertController(title: "Actions", message: nil, preferredStyle: .actionSheet)
         
@@ -69,7 +69,7 @@ class PlayersCollectionViewController: UICollectionViewController {
             }
         }
         
-        let resetDataAction = UIAlertAction(title: "Reset", style: .destructive) { (action) in
+        let resetDataAction = UIAlertAction(title: "Load", style: .destructive) { (action) in
             // Load option
             let loadInitialActionController = UIAlertController(title: "Load the initial data?", message: "This will reset everything back to the data from February 10th?", preferredStyle: .alert)
             let confirmAction = UIAlertAction(title: "Confirm", style: .default) { (action) in
